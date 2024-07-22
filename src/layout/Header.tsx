@@ -10,7 +10,7 @@ export const Header: React.FC<Props> = ({ className }) => {
             className
         )}>
             <div className=" flex items-center justify-between">
-                <div className="tracking-widest uppercase font-bold text-3xl text-sky-600 translate-x-8 sm:translate-x-0">LETSCODE</div>
+                <div className="tracking-widest uppercase font-bold text-3xl text-sky-600 translate-x-8 sm:translate-x-0">CODEMAX</div>
         
                 <nav className="absolute left-0 sm:static top-4 w-full max-w-6xl mx-auto flex items-center">
                 <input type="checkbox" className="peer sr-only" id="nav" />

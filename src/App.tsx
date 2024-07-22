@@ -13,7 +13,6 @@ function App() {
         [&_h2]:font-medium
         [&_h2]:uppercase
         `}>
-      <div>Test deploy gitpage</div>
       <Header className='px-10'></Header>
       <Hero className='flex justify-center'></Hero>
       <Banner className='max-w-[80%] mx-auto'></Banner>
