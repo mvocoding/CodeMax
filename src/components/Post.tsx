@@ -11,7 +11,7 @@ export const Post: React.FC<Props> = ({ className }) => {
         <section className={twMerge(``,
             className
         )}>
-            <div className={`mt-8 grid [grid-template-columns:repeat(auto-fit,minmax(320px,1fr))] gap-6
+            <div className={`mt-20  grid [grid-template-columns:repeat(auto-fit,minmax(320px,1fr))] gap-6
                 *:rounded-xl
                 *:transition
                 *:durartion-300
@@ -41,9 +41,8 @@ export const Post: React.FC<Props> = ({ className }) => {
                 [&_.stats>p]:flex 
                 [&_.stats>p]:items-center
                 [&_.stats>p]:gap-2
-                [&_.stats>p]:flex
             `}>
-                <article onClick={() => testOnClick()}>
+                <article>
                     <img src="https://shismqklzntzxworibfn.supabase.co/storage/v1/object/public/previews/4153d7bf-5de3-4149-9e51-201133210072.png" alt="Likes Dislikes Stats" className="capture" />
                     <div>
                         <div className="user">

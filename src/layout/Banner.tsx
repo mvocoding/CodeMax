@@ -12,24 +12,24 @@ export const Banner: React.FC<Props> = ({ className }) => {
         )}>
             <div className="flex gap-4 items-center p-6">
                 <div>
-                    <h4 className="text-xl font-semibold">Free Shipping</h4>
-                    <p>Free shipping on all orders over $19.99</p>
+                    <h4 className="text-xl font-semibold">Quality Learning</h4>
+                    <p>High-quality content to enhance your coding skills</p>
                 </div>
             </div>
 
 
             <div className="flex gap-4 items-center p-6">
                 <div>
-                    <h4 className="text-xl font-semibold">Money Back</h4>
-                    <p>Within 30 days of purchase</p>
+                    <h4 className="text-xl font-semibold">Flexible Access</h4>
+                    <p>Learn at your own pace, anytime, anywhere</p>
                 </div>
             </div>
 
 
             <div className="flex gap-4 items-center p-6">
                 <div>
-                    <h4 className="text-xl font-semibold">Online Support</h4>
-                    <p>Our online support is here for you</p>
+                    <h4 className="text-xl font-semibold">Expert Support</h4>
+                    <p>Our experts are here to help you with any questions</p>
                 </div>
             </div>
         </section>

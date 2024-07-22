@@ -1,3 +1,4 @@
+import { CategorySelect } from "../components/CategorySelect";
 import { Filter } from "../components/Filter";
 import { Post } from "../components/Post";
 import { Banner } from "../layout/Banner";
@@ -10,9 +11,10 @@ export const Home: React.FC<Props> = ({ className }) => {
     return (
         <div className="py-10">
             <Hero></Hero>
-            <Banner></Banner>
+            <Banner className="max-w-[70%] flex mx-auto"></Banner>
             <Filter></Filter>
-            <Post className="max-w-[90%] mx-auto"></Post>
+            <CategorySelect className="mt-5"></CategorySelect>
+            <Post className="max-w-[90%] mt-5 mx-auto"></Post>
         </div>
     )
 }
