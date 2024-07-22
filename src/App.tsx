@@ -1,9 +1,8 @@
-import { useState } from 'react'
-import { Header } from './Header'
-import { Hero } from './Hero'
-import { Filter } from './Filter'
-import { Banner } from './Banner'
-import { Post } from './Post'
+import { Header } from './layout/Header'
+import { Hero } from './layout/Hero'
+import { Filter } from './components/Filter'
+import { Banner } from './layout/Banner'
+import { Post } from './components/Post'
 
 function App() {
 
