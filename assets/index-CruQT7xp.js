@@ -173,4 +173,4 @@ Error generating stack: `+o.message+`
         [&_h2]:text-xl
         [&_h2]:font-medium
         [&_h2]:uppercase
-        `,children:[m.jsx("div",{children:"Hello World"}),m.jsx(jp,{className:"px-10"}),m.jsx(Pp,{className:"flex justify-center"}),m.jsx(Tp,{className:"max-w-[80%] mx-auto"}),m.jsx(Lp,{}),m.jsx(Rp,{className:"max-w-[90%] mx-auto"})]})}ro.createRoot(document.getElementById("root")).render(m.jsx(Uc.StrictMode,{children:m.jsx(Mp,{})}));
+        `,children:[m.jsx("div",{children:"Test deploy gitpage"}),m.jsx(jp,{className:"px-10"}),m.jsx(Pp,{className:"flex justify-center"}),m.jsx(Tp,{className:"max-w-[80%] mx-auto"}),m.jsx(Lp,{}),m.jsx(Rp,{className:"max-w-[90%] mx-auto"})]})}ro.createRoot(document.getElementById("root")).render(m.jsx(Uc.StrictMode,{children:m.jsx(Mp,{})}));
