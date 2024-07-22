@@ -1,10 +1,12 @@
 import { twMerge } from "tailwind-merge";
+import supabase from "../supabaseClient";
 
 interface Props {
     className?: string;
 }
 
 export const Post: React.FC<Props> = ({ className }) => {
+
     return (
         <section className={twMerge(``,
             className
@@ -41,7 +43,7 @@ export const Post: React.FC<Props> = ({ className }) => {
                 [&_.stats>p]:gap-2
                 [&_.stats>p]:flex
             `}>
-                <article>
+                <article onClick={() => testOnClick()}>
                     <img src="https://shismqklzntzxworibfn.supabase.co/storage/v1/object/public/previews/4153d7bf-5de3-4149-9e51-201133210072.png" alt="Likes Dislikes Stats" className="capture" />
                     <div>
                         <div className="user">

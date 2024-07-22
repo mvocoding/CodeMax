@@ -44,7 +44,7 @@ export const Filter: React.FC<Props> = ({ className }) => {
                     [&_.switch>span]:duration-300
                 ">
                     <input type="checkbox" id="invite"  className="peer sr-only" />
-                    <label for="invite" className="switch">
+                    <label htmlFor="invite" className="switch">
                         <span>Challengers</span>
                         <span id="method-2" >News Feed</span>
                     </label>

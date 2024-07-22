@@ -1,8 +1,9 @@
 import { Header } from './layout/Header'
-import { Hero } from './layout/Hero'
-import { Filter } from './components/Filter'
-import { Banner } from './layout/Banner'
-import { Post } from './components/Post'
+import { Route, Routes } from 'react-router-dom'
+import { Home } from './pages/Home'
+import { Challenge } from './pages/Challenge'
+import { ChallengeDetail } from './components/ChallengeDetail'
+import { Learn } from './pages/Learn'
 
 function App() {
 
@@ -14,10 +15,12 @@ function App() {
         [&_h2]:uppercase
         `}>
       <Header className='px-10'></Header>
-      <Hero className='flex justify-center'></Hero>
-      <Banner className='max-w-[80%] mx-auto'></Banner>
-      <Filter></Filter>
-      <Post className='max-w-[90%] mx-auto'></Post>
+      <Routes>
+        <Route path="/" element={ <Home /> } />
+        <Route path="/challenges" element={ <Challenge /> } />
+        <Route path="/challenges/:id" element={ <ChallengeDetail /> } />
+        <Route path="/learn" element={<Learn />} />
+      </Routes>
     </div>
   )
 }

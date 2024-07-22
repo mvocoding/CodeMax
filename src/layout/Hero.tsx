@@ -6,7 +6,7 @@ interface Props {
 
 export const Hero: React.FC<Props> = ({ className }) => {
     return (
-        <section className={twMerge(`py-20`,
+        <section className={twMerge(`flex justify-center py-20`,
             className            
         )}>
             <div className="!max-w-[40%] text-center flex flex-col items-center gap-6 justify-center">

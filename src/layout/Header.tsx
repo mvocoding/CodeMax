@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
 
 interface Props{
@@ -15,7 +16,7 @@ export const Header: React.FC<Props> = ({ className }) => {
                 <nav className="absolute left-0 sm:static top-4 w-full max-w-6xl mx-auto flex items-center">
                 <input type="checkbox" className="peer sr-only" id="nav" />
                 
-                <label for="nav" aria-label="primiary nav toggle" className="grid [grid-template-areas:'stack'] place-content-center cursor-pointer size-12  sm:hidden  hover:text-sky-500 
+                <label htmlFor="nav" aria-label="primiary nav toggle" className="grid [grid-template-areas:'stack'] place-content-center cursor-pointer size-12  sm:hidden  hover:text-sky-500 
                     *:transition-all
                     *:origin-center
                     *:[grid-area:stack]
@@ -73,9 +74,10 @@ export const Header: React.FC<Props> = ({ className }) => {
                         before:[&_li]:rounded-full
                         hover:before:[&_li]:inset-0
                     ">
-                        <li><a href="javascript:void(0);">Learn</a></li>
-                        <li className="active"><a href="javascript:void(0);">Challengers</a></li>
-                        <li><a href="javascript:void(0);">Playground</a></li>
+                        <li><Link to="/">Home</Link></li>
+                        <li><Link to="/learn">Learn</Link></li>
+                        <li className="active"><Link to="/challenges">Challengers</Link></li>
+                        <li><Link to="/playground">Playground</Link></li>
                     </ul>
                 </div>
                 </nav>
