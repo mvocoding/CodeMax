@@ -56,7 +56,7 @@ const CodeBlock = ({ codeString }) => (
 );
 
 
-const Learn = () => (
+export const Learn = () => (
   <div className="container mx-auto p-6 bg-black/50">
     <header className="mb-6 text-center">
       <h1 className="text-3xl font-bold">Understanding `grid-template-rows` in CSS Grid</h1>
@@ -178,5 +178,3 @@ const Learn = () => (
     </footer>
   </div>
 );
-
-export default Learn;
