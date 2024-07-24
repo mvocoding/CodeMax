@@ -3,6 +3,8 @@ import { FormProvider, useForm } from "react-hook-form";
 import z from 'zod';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormField } from "../components/FormField";
+import { Link } from "react-router-dom";
+import { useApp } from "../context/AppContext";
 
 interface Props {
     className?: string;
@@ -18,6 +20,7 @@ const schema = z.object({
 type FormValues = z.infer<typeof schema>;
 
 export const Signin: React.FC<Props> = ({ className }) => {
+    const { showLoader } = useApp();
     const methods = useForm<FormValues>({
         mode: 'onBlur',
         resolver: zodResolver(schema)
@@ -25,7 +28,6 @@ export const Signin: React.FC<Props> = ({ className }) => {
     const { handleSubmit } = methods;
 
     const onSubmit = (data: FormValues) => {
-        debugger;
     }
 
     return (
@@ -55,11 +57,11 @@ export const Signin: React.FC<Props> = ({ className }) => {
                     <p className="text-md">Sign in to your account to solve coding challenges, track your progress, and compete with other developers.</p>
                 </header>
                 <FormProvider {...methods}>
-                    <form onSubmit={handleSubmit(onSubmit)} className="mt-5 space-y-5  border-b pb-14">
+                    <form onSubmit={handleSubmit(onSubmit)} className="mt-5 space-y-5  pb-14">
                         <FormField  id="email" name="email" type="email" label="" placeholder="Email Address"></FormField>
                         <FormField className="" id="password" name="password" type="password" label="" placeholder="Password"></FormField>
                         <div className="flex justify-center">
-                            <button type="submit" className="btn-primary loading " >
+                            <button type="submit" className="btn-primary " >
                                 SIGN IN
                             </button>
                         </div>
@@ -67,19 +69,10 @@ export const Signin: React.FC<Props> = ({ className }) => {
                 </FormProvider>
 
                 <div className="
-                space-y-5 
-                [&>button]:border
-                [&>button]:flex
-                [&>button]:items-center
-                [&>button]:w-full
-                [&>button]:transition-all 
-                [&>button]:duration-300
-                hover:[&>button]:hover:bg-[#0C5172] 
-                hover:[&>button]:hover:text-white
             ">
-                    <button type="button">
+                    <Link to={'/signup'} className="btn-secondary">
                         Create New Account
-                    </button>
+                    </Link>
                 </div>
             </section>
 

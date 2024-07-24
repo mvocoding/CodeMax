@@ -41,15 +41,16 @@ export const FormField: React.FC<Props> = ({
             [&.editable]:flex
             [&.editable]:items-center 
             [&.editable]:gap-5
-            [&.editable>input]:bg-transparent
-            [&.editable>input]:border-0
-            [&.editable>input]:placeholder-white
-            [&.editable>input]:pointer-events-none
+            [&.editable.hide>input]:bg-transparent
+            [&.editable.hide>input]:border-0
+            [&.editable.hide>input]:placeholder-white
+            [&.editable.hide>input]:pointer-events-none
             whitespace-nowrap
+
             `,
         )}>
             <label>{label}</label>
-            <input id={id} type={type} className="peer" placeholder="test" 
+            <input id={id} type={type} className="peer" placeholder={placeholder} 
                 {...register(name)}
             />
         </div>

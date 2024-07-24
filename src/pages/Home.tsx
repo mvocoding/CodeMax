@@ -11,7 +11,7 @@ export const Home: React.FC<Props> = ({ className }) => {
     return (
         <div className="py-10">
             <Hero></Hero>
-            <Banner className="max-w-[70%] flex mx-auto"></Banner>
+            {/* <Banner className="max-w-[70%] flex mx-auto"></Banner> */}
             <Filter></Filter>
             {/* <CategorySelect className="mt-5"></CategorySelect> */}
             <Post className="max-w-[90%] mt-5 mx-auto"></Post>

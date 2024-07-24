@@ -21,9 +21,9 @@ export const ToastProvider: React.FC<Props> = ({ children }) => {
     const showToast = (type: ToastType['type'], message: string) => {
         const newToast = { id: Date.now(), message, type };
         setToasts(prev => {
-            if(toasts.length && toasts[length - 1].type == 'inprogress')
-                return [...prev.slice(0, -1), newToast];
-            return [...prev, newToast]
+            if(prev.length && prev[0].type == 'inprogress')
+                return [newToast, ...prev.slice(1)];
+            return [newToast, ...prev]
         });
     }
     const onClose = (id: number) => {

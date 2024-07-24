@@ -1,22 +1,25 @@
 import { Link } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
+import { useApp } from "../context/AppContext";
 
-interface Props{
+interface Props {
     className?: string;
 }
 
 export const Header: React.FC<Props> = ({ className }) => {
+    const { currentUser } = useApp();
+
     return (
         <header className={twMerge(`border-b border-zinc-100 py-4 relative`,
             className
         )}>
             <div className=" flex items-center justify-between">
                 <Link to={'/'} className="tracking-widest uppercase font-bold text-3xl text-sky-600 translate-x-8 sm:translate-x-0">CODEMAX</Link>
-        
+
                 <nav className="absolute left-0 sm:static top-4 w-full max-w-6xl mx-auto flex items-center">
-                <input type="checkbox" className="peer sr-only" id="nav" />
-                
-                <label htmlFor="nav" aria-label="primiary nav toggle" className="grid [grid-template-areas:'stack'] place-content-center cursor-pointer size-12  sm:hidden  hover:text-sky-500 
+                    <input type="checkbox" className="peer sr-only" id="nav" />
+
+                    <label htmlFor="nav" aria-label="primiary nav toggle" className="grid [grid-template-areas:'stack'] place-content-center cursor-pointer size-12  sm:hidden  hover:text-sky-500 
                     *:transition-all
                     *:origin-center
                     *:[grid-area:stack]
@@ -24,11 +27,11 @@ export const Header: React.FC<Props> = ({ className }) => {
                     peer-checked:first:*:scale-0 
                     peer-checked:last:*:scale-100
                 ">
-                    <span className="material-symbols-outlined block text-xl">menu</span>
-                    <span className="material-symbols-outlined block  text-xl">close</span>
-                </label>
-                    
-                <div className="w-full transition-all ease-[cubic-bezier(.47,1.64,.41,.8)]
+                        <span className="material-symbols-outlined block text-xl">menu</span>
+                        <span className="material-symbols-outlined block  text-xl">close</span>
+                    </label>
+
+                    <div className="w-full transition-all ease-[cubic-bezier(.47,1.64,.41,.8)]
                     absolute
                     left-0
                     top-12
@@ -43,7 +46,7 @@ export const Header: React.FC<Props> = ({ className }) => {
                     sm:peer-checked:duration-0
                     sm:peer-checked:transition-none
                 ">
-                    <ul className="bg-zinc-800 sm:bg-transparent overflow-hidden flex   w-full flex-col sm:gap-6 z-20 
+                        <ul className="bg-zinc-800 sm:bg-transparent overflow-hidden flex   w-full flex-col sm:gap-6 z-20 
                         sm:flex-row 
                         sm:items-center
                         sm:justify-center
@@ -74,32 +77,41 @@ export const Header: React.FC<Props> = ({ className }) => {
                         before:[&_li]:rounded-full
                         hover:before:[&_li]:inset-0
                     ">
-                        <li><Link to="/">Home</Link></li>
-                        <li><Link to="/learn">Learn</Link></li>
-                        <li className="active"><Link to="/challenges">Challengers</Link></li>
-                        <li><Link to="/playground">Playground</Link></li>
-                    </ul>
-                </div>
+                            <li><Link to="/">Home</Link></li>
+                            {/* <li><Link to="/learn">Learn</Link></li> */}
+                            <li className="active"><Link to="/challenges">Challengers</Link></li>
+                            <li><Link to="/playground">Playground</Link></li>
+                        </ul>
+                    </div>
                 </nav>
-                <div className="flex gap-2 
-                    *:border-none
-                    *:outline-none
-                    *:py-3
-                    *:px-4
-                    *:rounded-md
-                    *:text-sm 
-                    *:whitespace-nowrap
-                    *:min-w-min
-                    *:transition
-                    *:durartion-300
-                    hover:*:bg-sky-600 
-                    Xhover:*:text-slate-900
-                    last:*:bg-amber-600
-                    last:*:text-white
-
-                ">
-                    <Link to={'signin'} type="button">Sign In</Link>
-                </div>
+                <>
+                    {currentUser ? (
+                        <>
+                        <Link to={`/profile/${currentUser.username}`}>
+                            <img className="size-12 border border-sky-800 rounded-full" src={'/images/thinking.svg'} alt="User Avatar" />
+                        </Link>
+                        </>
+                    ) : (
+                        <div className="flex gap-2 
+                        *:border-none
+                        *:outline-none
+                        *:py-3
+                        *:px-4
+                        *:rounded-md
+                        *:text-sm 
+                        *:whitespace-nowrap
+                        *:min-w-min
+                        *:transition
+                        *:durartion-300
+                        hover:*:bg-sky-600 
+                        Xhover:*:text-slate-900
+                        last:*:bg-amber-600
+                        last:*:text-white">
+                            <Link className="btn " to={'/signin'} type="button">Sign In</Link>
+                            <Link className="btn " to={'/signup'} type="button">Sign Up</Link>
+                        </div>
+                    )}
+                </>
             </div>
         </header>
     )
