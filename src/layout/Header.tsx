@@ -98,8 +98,7 @@ export const Header: React.FC<Props> = ({ className }) => {
                     last:*:text-white
 
                 ">
-                    <button type="button">Log In</button>
-                    <button type="button">Sign Up</button>
+                    <Link to={'signin'} type="button">Sign In</Link>
                 </div>
             </div>
         </header>

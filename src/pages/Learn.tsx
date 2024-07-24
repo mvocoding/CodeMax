@@ -173,8 +173,8 @@ export const Learn = () => (
       </div>
     </section>
 
-    <footer className="mt-6 text-center text-gray-600">
-      <p>Summary: The <code className="bg-gray-200 p-1 rounded">grid-template-rows</code> property helps define the vertical spacing and layout of grid items. Use it to set fixed, flexible, or mixed row sizes based on your design needs.</p>
+    <footer className="mt-6 text-center ">
+      <p>Summary: The <code className="p-1 rounded">grid-template-rows</code> property helps define the vertical spacing and layout of grid items. Use it to set fixed, flexible, or mixed row sizes based on your design needs.</p>
     </footer>
   </div>
 );

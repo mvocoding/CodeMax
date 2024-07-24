@@ -1,10 +1,13 @@
 import { twMerge } from "tailwind-merge";
+import supabase from "../supabaseClient";
 
 interface Props{
     className?: string;
 }
 
 export const CategorySelect: React.FC<Props> = ({ className }) => {
+
+
     return (
         <ul className={twMerge(`
         flex justify-center gap-10
@@ -13,10 +16,6 @@ export const CategorySelect: React.FC<Props> = ({ className }) => {
             `,
             className
         )}>
-            <li>
-                <img className="w-full" src="images/html.svg" alt="category" />
-                <p>HTML</p>
-            </li>
             <li>
                 <img className="w-full" src="images/css.svg" alt="category" />
                 <p>CSS</p>
