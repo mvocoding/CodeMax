@@ -4,6 +4,7 @@ import { twMerge } from "tailwind-merge";
 import z from 'zod';
 import { FormField } from "../components/FormField";
 import supabase from "../supabaseClient";
+import { useToast } from "../context/ToastContext";
 
 interface Props {
     className?: string;
@@ -28,6 +29,8 @@ export const Signup: React.FC<Props> = ({ className }) => {
         resolver: zodResolver(schema)
     });
     const { handleSubmit, formState: { errors } } = methods;
+    const { showToast } = useToast();
+
     const onSubmit = async (formData: FormValues) => {
         const { data, error } = await supabase.auth.signUp({
             email: formData.email,
@@ -54,7 +57,7 @@ export const Signup: React.FC<Props> = ({ className }) => {
             
             if(userRoleError) return;
         }
-    }
+    }       
 
     return (
         <main className={twMerge(`
@@ -92,7 +95,6 @@ export const Signup: React.FC<Props> = ({ className }) => {
                         <div className="flex justify-center">
                             <button type="submit" className="bg-[#0C5172] text-white  transition duration-300 hover:bg-[#115889] shadow-lg shadow-[#0C5172]/50" >
                                 SIGN UP
-                                <span className="material-symbols-outlined">arrow_right_alt</span>
                             </button>
                         </div>
                     </form>

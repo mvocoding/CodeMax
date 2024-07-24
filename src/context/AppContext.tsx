@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useContext, useState } from "react";
+import { createContext, ReactNode, useContext } from "react";
 
 interface AppContextProps{
 }
@@ -16,7 +16,7 @@ export const AppContextProvider: React.FC<Props> = ({ children }) => {
     )
 }
 
-export const useAppContext = (): AppContextProps => {
+export const useApp = (): AppContextProps => {
     const context = useContext(AppContext);
 
     if(context == undefined){

@@ -20,7 +20,7 @@ export const FormField: React.FC<Props> = ({
 }) => {
     const { register, formState: { errors } } = useFormContext();
     return (
-        <div className={twMerge(`field 
+        <div className={twMerge(className, `field 
             [&_label]:font-semibold
             [&_label]:block
             [&_label]:mb-1
@@ -36,14 +36,22 @@ export const FormField: React.FC<Props> = ({
             focus:[&_input]:outline-none
             focus:[&_input]:ring-0
             [&_]:relative
-            
+            [&.editable_*]:p-0
+            [&.editable_*]:m-0
+            [&.editable]:flex
+            [&.editable]:items-center 
+            [&.editable]:gap-5
+            [&.editable>input]:bg-transparent
+            [&.editable>input]:border-0
+            [&.editable>input]:placeholder-white
+            [&.editable>input]:pointer-events-none
+            whitespace-nowrap
             `,
-            className
         )}>
-            <input id={id} type={type} className="peer" placeholder={placeholder}
+            <label>{label}</label>
+            <input id={id} type={type} className="peer" placeholder="test" 
                 {...register(name)}
             />
-            <label className="">{label}</label>
         </div>
     )
 }

@@ -20,10 +20,10 @@ export const CategorySelect: React.FC<Props> = ({ className }) => {
                 <img className="w-full" src="images/css.svg" alt="category" />
                 <p>CSS</p>
             </li>
-            <li>
+            {/* <li>
                 <img className="w-full" src="images/js.svg" alt="category" />
                 <p>JAVASCRIPT</p>
-            </li>
+            </li> */}
         </ul>
     )
 }

@@ -59,9 +59,8 @@ export const Signin: React.FC<Props> = ({ className }) => {
                         <FormField  id="email" name="email" type="email" label="" placeholder="Email Address"></FormField>
                         <FormField className="" id="password" name="password" type="password" label="" placeholder="Password"></FormField>
                         <div className="flex justify-center">
-                            <button type="submit" className="bg-[#0C5172] text-white  transition duration-300 hover:bg-[#115889] shadow-lg shadow-[#0C5172]/50" >
+                            <button type="submit" className="btn-primary loading " >
                                 SIGN IN
-                                <span className="material-symbols-outlined">arrow_right_alt</span>
                             </button>
                         </div>
                     </form>

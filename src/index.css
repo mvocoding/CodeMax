@@ -44,3 +44,25 @@ body,
   align-items: center;
   overflow-x: hidden;
 }
+
+.disabled, .disabled button{
+  @apply bg-opacity-30 pointer-events-none;
+}
+.btn{
+  @apply relative flex items-center justify-center px-4 py-2 outline-none rounded-lg transition-all duration-300;
+}
+.btn-primary{
+  @apply btn bg-purple-700 text-white ;
+}
+.btn-secondary{
+  @apply btn bg-[#0C5172] text-white transition duration-300 hover:bg-[#115889] shadow-lg shadow-[#0C5172]/50;
+}
+.btn-primary:hover{
+  @apply bg-white text-purple-700;
+}
+.btn.loading::after{
+  @apply absolute right-5 content-[''] size-[20px] border-[3px] border-t-transparent rounded-full animate-spin;
+}
+.btn.loading{
+  @apply disabled pr-14;
+}
