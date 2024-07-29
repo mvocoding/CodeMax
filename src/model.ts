@@ -7,14 +7,29 @@ export interface TabItem{
 
 export interface User{
     id: string;
+    created_at: string;
     email: string;
-    username: string;
-    avatar: string;
-    fullname: string;
-    description: string;
     user_metadata: {
         email_verified: boolean;
     }
+    profile: {
+        avatar: string;
+        created_at: string;
+        description: string;
+        fullname: string;
+        likes: number;
+        role: string;
+        user_id: string;
+        username: string;
+    }
+}
+
+export interface NewChallengeForm{
+    name: string;
+    description: string;
+    thumbnail: string;
+    code: Record<string, string>;
+    user_id: string;
 }
 
 const passwordRegex = /^.{6,}$/;
@@ -29,5 +44,10 @@ export const signUpSchema = z.object({
     path: ['confirmpassword']
 })
 
+export const signInSchema = z.object({
+    email: z.string().min(1),
+    password: z.string().min(1)
+});
 export type SignupForm = z.infer<typeof signUpSchema>;
+export type SigninForm = z.infer<typeof signInSchema>;
 

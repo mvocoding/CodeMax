@@ -2,6 +2,9 @@ import { Link } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
 import { useApp } from "../context/AppContext";
 import { User } from "../model";
+import { useSubmissionStore } from "../store/useSubmissionStore";
+import { useSupabase } from "../context/SupabaseContext";
+import { useToast } from "../context/ToastContext";
 
 interface Props {
     className?: string;
@@ -32,25 +35,47 @@ const Guess = () => {
 const UserSignedIn: React.FC<{ currentUser: User }> = ({ currentUser }) => {
     return (
         <div className="flex justify-start items-center gap-3 ">
-                            <div className="capitalize text-center">
-                                <p className="px-4 py-1 bg-yellow-400 text-purple-900 font-bold rounded-lg">{currentUser.profile.role}</p>
-                            </div>
-                            <Link className="size-12" to={`/profile/${currentUser.profile.username}`}>
-                                <img className="w-full object-cover object-top border border-sky-800 rounded-full" src={'/images/thinking.svg'} alt="User Avatar" />
-                            </Link>
-                        </div>
+            <div className="capitalize text-center">
+                <p className="px-4 py-1 bg-yellow-400 text-purple-900 font-bold rounded-lg">{currentUser.profile.role}</p>
+            </div>
+            <Link className="size-12" to={`/profile/${currentUser.profile.username}`}>
+                <img className="w-full object-cover object-top border border-sky-800 rounded-full" src={'/images/thinking.svg'} alt="User Avatar" />
+            </Link>
+        </div>
     )
 }
-export const Header: React.FC<Props> = ({ className }) => {
-    const { currentUser } = useApp();
+export const SubmissionHeader: React.FC<Props> = ({ className }) => {
+    const { formData } = useSubmissionStore();
+    const { updateSubmission } = useSupabase();
+    const {  currentUser } = useApp();
+    const { showToast } = useToast();
+
+    const handleSaveClick = async () => {
+        showToast("inprogress", 'Updating your submission...')
+        const {error, data} = await updateSubmission(formData?.id!, formData?.challenge_code!, formData?.draft!);
+        if(error){
+            showToast("error", 'Something went wrong!')
+        }
+        else{
+            showToast("success", 'Update submission successfully !')
+        }
+    }
+    const handleSubmitClick = async () => {
+        showToast("inprogress", 'Submitting your submission...')
+        const {error, data} = await updateSubmission(formData?.id!, formData?.challenge_code!, false);
+        if(error){
+            showToast("error", 'Something went wrong!')
+        }
+        else{
+            showToast("success", 'Submit submission successfully !')
+        }
+    }
 
     return (
-        <header className={twMerge(`p-4 relative bg-[#2C2446]`,
+        <header className={twMerge(`bg-[#2C2446] py-4 relative`,
             className
         )}>
             <div className=" flex items-center justify-between">
-                <Link to={'/'} className="tracking-widest uppercase font-bold text-3xl text-sky-600 translate-x-8 sm:translate-x-0">CODEMAX</Link>
-
                 <nav className="absolute left-0 sm:static top-4 w-full max-w-6xl mx-auto flex items-center">
                     <input type="checkbox" className="peer sr-only" id="nav" />
 
@@ -111,15 +136,12 @@ export const Header: React.FC<Props> = ({ className }) => {
                         before:[&_li]:rounded-full
                         hover:before:[&_li]:inset-0
                     ">
-                            <li><Link to="/">Home</Link></li>
-                            <li className="active"><Link to="/challenges">Challengers</Link></li>
-                            <li><Link to="/playground">Playground</Link></li>
+                            <li className="">Preview</li>
+                            <li className="" onClick={handleSaveClick}>Save Changes</li>
+                            <li className="active" onClick={handleSubmitClick}>Submit</li>
                         </ul>
                     </div>
                 </nav>
-                <>
-                    {currentUser?.id ? (<UserSignedIn currentUser={currentUser} />) : (<Guess />)}
-                </>
             </div>
         </header>
     )

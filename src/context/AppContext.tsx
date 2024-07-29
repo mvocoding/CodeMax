@@ -4,8 +4,9 @@ import { useSupabase } from "./SupabaseContext";
 
 interface AppContextProps {
     showLoader: (value: boolean) => void;
-    setCurrentUser: (data: { user: User, session: any }) => void;
-    currentUser: User | null;   
+    setCurrentUser: (user: User) => void;
+    setCurrentSession: (session: any) => void;
+    currentUser: User | null;
 }
 interface Props {
     children: ReactNode;
@@ -22,9 +23,8 @@ const LoaderOverlay: React.FC<LayerOverlayProps> = ({ isVisible }) => {
             <div className="absolute animate-spin rounded-full size-[15rem] border-t-8 border-b-8 border-[#0055D2] border-opacity-50"></div>
             <img
                 className="size-40 "
-                src="images/thinking.svg" alt="Avatar Thinking" />
+                src="/images/thinking.svg" alt="Avatar Thinking" />
         </div>
-
     )
 }
 
@@ -37,30 +37,40 @@ export const AppProvider: React.FC<Props> = ({ children }) => {
     useEffect(() => {
         const savedUser = localStorage.getItem('supabase.auth.user');
         const savedSession = localStorage.getItem('supabase.auth.session');
-        if(savedUser && savedSession){
+        if (savedUser && savedSession) {
             setCurrentUserState(JSON.parse(savedUser));
             supabase.auth.setSession(savedSession);
+        }
+        else{
+            setCurrentUserState({
+                id: '',
+                profile: {
+                    username: ''
+                }
+            });
         }
     }, []);
 
     const showLoader = (value: boolean) => {
         setLoaderVisible(value);
     }
-    const setCurrentUser = (data: { user: User, session: any }) => {
-        const { user, session } = data;
+    const setCurrentUser = (user: User) => {
         setCurrentUserState(user);
-        if(user){
-            localStorage.setItem('supabase.auth.user', JSON.stringify(user)); 
-            localStorage.setItem('supabase.auth.session', JSON.stringify(session));  
-        }
-        else{
-            localStorage.removeItem('supabase.auth.user');   
-            localStorage.removeItem('supabase.auth.session');   
-        }
+        if (user)
+            localStorage.setItem('supabase.auth.user', JSON.stringify(user));
+        else 
+            localStorage.removeItem('supabase.auth.user');
+    }
+
+    const setCurrentSession = (session: any) => {
+        if (session)
+            localStorage.setItem('supabase.auth.session', JSON.stringify(session));
+        else
+            localStorage.removeItem('supabase.auth.session');
     }
 
     return (
-        <AppContext.Provider value={{ showLoader, currentUser, setCurrentUser }}>
+        <AppContext.Provider value={{ showLoader, currentUser, setCurrentUser, setCurrentSession }}>
             <LoaderOverlay isVisible={loaderVisible}></LoaderOverlay>
             {children}
         </AppContext.Provider>

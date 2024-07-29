@@ -1,33 +1,45 @@
 import { twMerge } from "tailwind-merge";
 import { FormProvider, useForm } from "react-hook-form";
-import z from 'zod';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormField } from "../components/FormField";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext";
+import { SigninForm, signInSchema } from "../model";
+import { useEffect } from "react";
+import { Testimonial } from "../layout/Testimonial";
+import { useToast } from "../context/ToastContext";
+import { useSupabase } from "../context/SupabaseContext";
 
 interface Props {
     className?: string;
 }
 
-const schema = z.object({
-    email: z.string()
-        .nonempty('Email is required!')
-        .email('Invalid Email address'),
-    password: z.string()
-        .nonempty('Password is required!')
-});
-type FormValues = z.infer<typeof schema>;
-
 export const Signin: React.FC<Props> = ({ className }) => {
-    const { showLoader } = useApp();
-    const methods = useForm<FormValues>({
+    const methods = useForm<SigninForm>({
         mode: 'onBlur',
-        resolver: zodResolver(schema)
+        resolver: zodResolver(signInSchema)
     });
-    const { handleSubmit } = methods;
+    const { handleSubmit, formState: { isSubmitting }} = methods;
+    const { showToast } = useToast();
+    const { signin } = useSupabase();
+    const { setCurrentUser } = useApp();
+    const navigate = useNavigate();
 
-    const onSubmit = (data: FormValues) => {
+    useEffect(() => {
+        if(isSubmitting)
+            showToast('inprogress', 'Signing in. Please wait...');
+    }, [isSubmitting])
+    
+    const onSubmit = async (formdata: SigninForm) => {
+        const { error, data } = await signin(formdata);
+
+        if(!error){
+            showToast('success', 'Signin successfully!');
+            setCurrentUser(data);
+            navigate('/');
+        }
+        else 
+            showToast('error', 'Something went wrong!');
     }
 
     return (
@@ -68,28 +80,14 @@ export const Signin: React.FC<Props> = ({ className }) => {
                     </form>
                 </FormProvider>
 
-                <div className="
-            ">
-                    <Link to={'/signup'} className="btn-secondary">
+                <div className="">
+                    <Link to={'/signup'} className={twMerge("btn-secondary", isSubmitting && 'loading')}>
                         Create New Account
                     </Link>
                 </div>
             </section>
 
-            <section className="hidden lg:flex flex-col gap-12 p-10 bg-white rounded-xl text-gray-800">
-                <img className="rounded-full w-[200px] mx-auto"
-                    src="https://media.licdn.com/dms/image/C4D0BAQElUhj0AoCXPw/company-logo_200_200/0/1640987068231/courseralearning_logo?e=1729728000&v=beta&t=YjloNleFq08w-JIRa3sT7fOvQhG7B-YSOgdcHgSR52M" alt="Avatar" />
-
-                <blockquote className="text-xl  
-                after:right-0 after:text-5xl after:absolute after:content-[close-quote]
-                before:left-0 before:-top-5 before:text-5xl before:absolute before:content-[open-quote]
-                p-5 relative ">
-                    
-                    <div>
-                        <h2>I've been using CodeDeck for my development projects, and it's been a game-changer. The intuitive interface and powerful features streamline my workflow, making coding more efficient and enjoyable. Highly recommend CodeDeck for developers looking to enhance their productivity</h2>
-                    </div>
-                </blockquote>
-            </section>
+            <Testimonial></Testimonial>
         </main>
     )
 }

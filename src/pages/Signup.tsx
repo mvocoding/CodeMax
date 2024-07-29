@@ -3,7 +3,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { twMerge } from "tailwind-merge";
 import { FormField } from "../components/FormField";
 import { useToast } from "../context/ToastContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { Testimonial } from "../layout/Testimonial";
 import { SignupForm, signUpSchema } from "../model";
@@ -21,8 +21,9 @@ export const Signup: React.FC<Props> = ({ className }) => {
     });
     const { handleSubmit, formState: { isSubmitting } } = methods;
     const { showToast } = useToast();
-    const { setCurrentUser } = useApp();
+    const { setCurrentUser, setCurrentSession } = useApp();
     const { signup } = useSupabase();
+    const navigate = useNavigate()
 
     useEffect(() => {
         if(isSubmitting)
@@ -33,7 +34,9 @@ export const Signup: React.FC<Props> = ({ className }) => {
         const { error, data } = await signup(formData);
         if(!error){
             showToast('success', 'Signup successfully!');
-            setCurrentUser(data);
+            setCurrentUser(data.user);
+            setCurrentSession(data.session);
+            navigate('/', { replace: true });
         }
         else 
             showToast('error', 'Something went wrong!');
@@ -60,7 +63,7 @@ export const Signup: React.FC<Props> = ({ className }) => {
                         <FormField id="password" name="password" type="password" label="" placeholder="Password"></FormField>
                         <FormField id="confirmpassword" name="confirmpassword" type="password" label="" placeholder="Confirm Password"></FormField>
                         <div className="flex justify-center">
-                            <button type="submit" className={`btn-primary ${isSubmitting ? 'loading' : ''}`} >
+                            <button type="submit" className={`btn-primary ${isSubmitting ? 'loading' : undefined}`} >
                                 SIGN UP
                             </button>
                         </div>

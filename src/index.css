@@ -44,8 +44,10 @@ body,
   align-items: center;
   overflow-x: hidden;
 }
-
-.disabled, .disabled button{
+.disabled{
+  @apply bg-opacity-30 pointer-events-none border border-gray-600;
+}
+.disabled button{
   @apply bg-opacity-30 pointer-events-none;
 }
 .btn{
@@ -65,4 +67,52 @@ body,
 }
 .btn.loading{
   @apply disabled pr-14;
+}
+
+
+@keyframes slideIn {
+  from {
+    transform: translateY(1000px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.slide-in {
+  animation: slideIn 0.2s forwards;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px); /* Start 20px above its final position */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0); /* End at its original position */
+  }
+}
+
+/* Apply the animation to an element */
+.fade-in-down {
+  animation: fadeInDown 0.3s ease-in-out; /* Adjust duration and timing function as needed */
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px); /* Start 20px below its final position */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0); /* End at its original position */
+  }
+}
+
+/* Apply the animation to an element */
+.fade-in-up {
+  animation: fadeInUp 0.5s ease-in-out; /* Adjust duration and timing function as needed */
 }
