@@ -45,7 +45,7 @@ export const Header: React.FC<Props> = ({ className }) => {
     const { currentUser } = useApp();
 
     return (
-        <header className={twMerge(`p-4 relative bg-[#2C2446]`,
+        <header className={twMerge(`py-4 px-10 relative bg-[#2C2446]`,
             className
         )}>
             <div className=" flex items-center justify-between">

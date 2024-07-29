@@ -22,7 +22,7 @@ export const Home: React.FC<Props> = ({ className }) => {
     }, []);
 
     return (
-        <div className="py-10"> 
+        <div className="py-10 fade-in-up"> 
             <Hero></Hero>
             <Banner className="max-w-[70%] flex mx-auto"></Banner>
             <LazyLoading isLoading={!challenges}>

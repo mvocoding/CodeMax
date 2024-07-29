@@ -30,7 +30,7 @@ export const Submission: React.FC<Props> = ({ className }) => {
             if (!currentUser || !challengeid) return;
             const { error, data } = await createOrUpdateSubmission(currentUser.id, challengeid);
             if (error) {
-                navigate('/notfound');
+                navigate('/notfound', { replace: true });
                 return;
             }
             setFormData(data);

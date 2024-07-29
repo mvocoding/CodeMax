@@ -231,11 +231,11 @@ export const SupabaseProvider: React.FC<Props> = ({ children }) => {
     const getChallenges = async (name: string, tag: string[], rating: number, pagenumber: number, pagesize: number): Promise<any> => {
         try {
             const { error, data } = await supabase.rpc('filter_challenges', {
-                filter_name: null,
-                filter_tag: null,
-                filter_rating: null,
-                page_number: 1,
-                page_size: 12
+                filter_name: name,
+                filter_tag: tag,
+                filter_rating: rating,
+                page_number: pagenumber,
+                page_size: pagesize
             });
             return {
                 error,

@@ -9,7 +9,7 @@ interface TabButtonProps {
     onClick: () => void;
 }
 const TabButton: React.FC<TabButtonProps> = ({ title, isActive, onClick }) => (
-    <button type="button" className={twMerge('bg-gray-500/50  [&.active]:bg-purple-700 !p-2 ',
+    <button type="button" className={twMerge('bg-gray-500/20  [&.active]:bg-purple-700 !p-2 ',
         isActive && 'active'
     )} onClick={onClick}>{title}
     </button>

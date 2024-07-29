@@ -60,6 +60,12 @@ body,
 .btn{
   @apply relative flex items-center justify-center px-4 py-2 outline-none rounded-lg transition-all duration-300;
 }
+.btn-dark{
+  @apply btn bg-gray-800 text-white ;
+}
+.btn:hover{
+  @apply bg-purple-700;
+}
 .btn-primary{
   @apply btn bg-purple-700 text-white ;
 }

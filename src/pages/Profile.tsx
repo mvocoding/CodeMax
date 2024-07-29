@@ -37,7 +37,7 @@ export const Profile: React.FC<Props> = ({ className }) => {
                   `,
             btns: currentUser?.profile.username === id ? (
                 <>
-                    <button className="btn" type="button"
+                    <button className="btn-primary" type="button"
                         onClick={(e) => { e.preventDefault(); setFormState('edit') }}>Edit My Profile</button>
                     <button className="btn-primary" type="button"
                         onClick={(e) => { e.preventDefault(); setFormState('edit') }}>Start Another Challenge</button>
@@ -49,7 +49,12 @@ export const Profile: React.FC<Props> = ({ className }) => {
         },
         'edit': {
             formClass: '[&_.form-wrapper]:space-y-5',
-            btns: (<button className="btn-primary" type="submit">Saves Change</button>)
+            btns: (
+                <>
+            <button className="btn-primary" type="submit">Saves Change</button>
+            <button className="btn" type="submit">Back</button>
+            </>
+        )
         }
     }
     const { formClass, btns } = formStateList[formState];
@@ -135,7 +140,7 @@ export const Profile: React.FC<Props> = ({ className }) => {
     if (!profile || !submissions) return;
 
     return (
-        <section className={twMerge(`relative mt-10
+        <section className={twMerge(`relative mt-10 fade-in-up
             `,
             className
         )}>
@@ -154,10 +159,20 @@ export const Profile: React.FC<Props> = ({ className }) => {
                 `}>
 
                     <div className="w-[30%] flex flex-col justify-center items-center gap-10 ">
-                        <img src={"https://tailwindflex.com/public/images/" + profile?.avatar!} alt="Likes Dislikes Stats" className="w-full aspect-square rounded-full  object-cover object-top" />
-                        <div className="w-full flex justify-between">
-                            <p>Likes: {profile.likes}</p>
-                            <p>Submissions: 10</p>
+                        <img src={"https://tailwindflex.com/public/images/" + profile?.avatar!} alt="Likes Dislikes Stats" className="w-[11rem] aspect-square rounded-full  object-cover object-top" />
+                        <div className="w-full flex justify-center gap-10">
+                            <div className="flex flex-col text-sm items-center">
+                                <span className="material-symbols-outlined text-gray-500">
+                                    code
+                                </span>
+                                <span>1000</span>
+                            </div>
+                            <div className="flex flex-col text-sm items-center">
+                                <span className="material-symbols-outlined text-gray-500">
+                                    visibility
+                                </span>
+                                <span>1000</span>
+                            </div>
                         </div>
                     </div>
                     <div className="flex-1 form-wrapper">
@@ -177,7 +192,7 @@ export const Profile: React.FC<Props> = ({ className }) => {
                 </form>
             </FormProvider>
             <LazyLoading className="min-h-[400px]" text="Loading Submission..." isLoading={!submissions}>
-                <SubmissionPost challengeID={'1'} submissionsList={submissions}
+                <SubmissionPost submissionsList={submissions}
                     className="mt-10 mx-auto max-w-[90%]"></SubmissionPost>
             </LazyLoading>
         </section>)

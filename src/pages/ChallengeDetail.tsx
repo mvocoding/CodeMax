@@ -15,13 +15,14 @@ export const ChallengeDetail: React.FC<Props> = ({ className }) => {
     const [submissions, setSubmissions] = useState<any | null>(null);
     useEffect(() => {
         const fetchData = async () => {
-            const { challenge, submission } = await getChallengeWithSubmission(id);
+            const { challenge, submission } = await getChallengeWithSubmission(id!);
             if (challenge) {
                 setChallenge(challenge);
                 setSubmissions(submission);
             }
         }
-        fetchData();
+        if(id)
+            fetchData();
     }, [id]);
 
     if(!challenge) return null;
@@ -43,12 +44,12 @@ export const ChallengeDetail: React.FC<Props> = ({ className }) => {
                         Prioritize creativity over pixel-perfect accuracy and showcase your developer ingenuity.</p>
                     <div className="flex flex-col *:w-full gap-5 *:rounded-lg *:py-2">
                         <Link to={`/challenges/${challenge?.id}/newsubmission`} className="btn-primary">Start This Challenge</Link>
-                        <button className="btn">View All Challenges</button>
+                        <button className="btn-dark">View All Challenges</button>
                     </div>
                 </div>
             </article>
             <LazyLoading className="min-h-[400px]" text="Loading Submission..." isLoading={!submissions}>
-                <SubmissionPost challengeID={challenge?.id} submissionsList={submissions}
+                <SubmissionPost submissionsList={submissions}
                     className="mt-10 mx-auto max-w-[90%]"></SubmissionPost>
             </LazyLoading>
         </section>)
