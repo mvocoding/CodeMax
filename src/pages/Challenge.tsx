@@ -23,8 +23,8 @@ export const Challenge: React.FC<Props> = ({ className }) => {
     }, []);
 
     return (
-        <LazyLoading isLoading={!challenges}>
-            <section className={twMerge(`mt-10
+        <LazyLoading isLoading={!challenges} className="min-h-[400px]">
+            <section className={twMerge(`max-w-[90%] mx-auto
             `,
                 className
             )}>

@@ -3,6 +3,7 @@ import { useSupabase } from "../context/SupabaseContext";
 import { Hero } from "../layout/Hero";
 import { Banner } from "../layout/Banner";
 import { LazyLoading } from "../components/LazyLoading";
+import { ChallengePost } from "../components/ChallengePost";
 
 interface Props {
     className?: string;
@@ -27,7 +28,7 @@ export const Home: React.FC<Props> = ({ className }) => {
             <LazyLoading isLoading={!challenges}>
                 {/* <Filter></Filter> */}
                 {/* <CategorySelect className="mt-5"></CategorySelect> */}
-                <Post challengeList={challenges!} className="max-w-[90%] mt-5 mx-auto"></Post>
+                <ChallengePost challengesList={challenges!} style="secondary" className="max-w-[90%] mt-5 mx-auto"></ChallengePost>
             </LazyLoading>
         </div>
 

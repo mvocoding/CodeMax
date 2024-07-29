@@ -8,6 +8,8 @@ import { ReactNode, useEffect, useState } from "react";
 import { useSupabase } from "../context/SupabaseContext";
 import { useToast } from "../context/ToastContext";
 import { useNavigate, useParams } from "react-router-dom";
+import { LazyLoading } from "../components/LazyLoading";
+import { SubmissionPost } from "../components/SubmissionPost";
 
 interface Props {
     className?: string;
@@ -21,8 +23,8 @@ interface FormStateProps {
 export const Profile: React.FC<Props> = ({ className }) => {
     const { currentUser, setCurrentUser } = useApp();
     const [profile, setProfile] = useState(null);
-    const [challenges, setChallenges] = useState<any[] | null>(null);
-    const { checkUsernameAvailability, updateUserProfile, getUserProfile } = useSupabase();
+    const [submissions, setSubmissions] = useState<any[] | null>(null);
+    const { checkUsernameAvailability, updateUserProfile, getUserProfile, getSubmissionsByUsername } = useSupabase();
     const [formState, setFormState] = useState<FormStateKey>('idle');
     const { showToast } = useToast();
     const { id } = useParams();
@@ -73,8 +75,17 @@ export const Profile: React.FC<Props> = ({ className }) => {
     const { handleSubmit, reset } = methods;
 
     useEffect(() => {
+        const fetchData = async () => {
+            const { error, data } = await getSubmissionsByUsername(id);
+            if (error) {
+                return;
+            }
+            setSubmissions(data);
+        }
+
         if (currentUser) {
             setupProfile(id);
+            fetchData();
         }
     }, [currentUser, id]);
 
@@ -121,7 +132,7 @@ export const Profile: React.FC<Props> = ({ className }) => {
         }
     }
 
-    if (!profile) return;
+    if (!profile || !submissions) return;
 
     return (
         <section className={twMerge(`relative mt-10
@@ -139,7 +150,7 @@ export const Profile: React.FC<Props> = ({ className }) => {
                 rounded-xl items-start max-w-[80%] bg-[#2C2446]
                 [&_label]:min-w-[7rem]
                 [&_.field>input]:flex-1
-                *:p-10
+                *:p-5
                 `}>
 
                     <div className="w-[30%] flex flex-col justify-center items-center gap-10 ">
@@ -165,6 +176,9 @@ export const Profile: React.FC<Props> = ({ className }) => {
                     </div>
                 </form>
             </FormProvider>
-            <Post className="flex mx-auto max-w-[90%]" challengeList={challenges}></Post>
+            <LazyLoading className="min-h-[400px]" text="Loading Submission..." isLoading={!submissions}>
+                <SubmissionPost challengeID={'1'} submissionsList={submissions}
+                    className="mt-10 mx-auto max-w-[90%]"></SubmissionPost>
+            </LazyLoading>
         </section>)
 }
