@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
 import { useApp } from "../context/AppContext";
 import { User } from "../model";
@@ -43,7 +43,30 @@ const UserSignedIn: React.FC<{ currentUser: User }> = ({ currentUser }) => {
 }
 export const Header: React.FC<Props> = ({ className }) => {
     const { currentUser } = useApp();
+    const { pathname } = useLocation();
+    const navigate = useNavigate();
 
+    const MENU: {
+        text: string,
+        className: string,
+        onClick: () => void
+    }[] = [
+        {
+            text: 'Home',
+            className: pathname == '/' ? 'active': '',
+            onClick: () => navigate('/')
+        },
+        {
+            text: 'Challenges',
+            className: pathname == '/challenges' ? 'active': '',
+            onClick: () => navigate('/challenges')
+        },
+        {
+            text: 'My Profile',
+            className: !currentUser?.profile.username ? 'hidden' : pathname.includes('/profile/') ? 'active' : '',
+            onClick: () => navigate(`/profile/${currentUser?.profile.username}`)
+        }
+    ]
     return (
         <header className={twMerge(`py-4 px-10 relative bg-[#2C2446]`,
             className
@@ -110,10 +133,14 @@ export const Header: React.FC<Props> = ({ className }) => {
                         before:[&_li]:-z-10
                         before:[&_li]:rounded-full
                         hover:before:[&_li]:inset-0
+
+                        *:cursor-pointer
                     ">
-                            <li><Link to="/">Home</Link></li>
-                            <li className="active"><Link to="/challenges">Challengers</Link></li>
-                            <li><Link to="/playground">Playground</Link></li>
+                            {MENU.map((option, index) => (
+                                <li className={option.className} 
+                                onClick={option.onClick}
+                                key={index}>{option.text}</li>
+                            ))}
                         </ul>
                     </div>
                 </nav>

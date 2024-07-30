@@ -104,10 +104,11 @@ export const SubmissionHeader: React.FC<Props> = ({ className }) => {
                 <div className="max-md:hidden">
                     <p className="font-semibold text-xl uppercase">{formData!.challenger_name}</p>
                 </div>
-                <ul className="bg-transparent overflow-hidden flex gap-6 z-20 
+                <ul className="bg-transparent overflow-hidden flex gap-2 z-20 
                         items-center
                         justify-center
-                        *:p-2
+                        *:px-4
+                        *:py-2
                         *:relative
                         *:transition-all
                         *:duration-300

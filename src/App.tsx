@@ -14,10 +14,9 @@ import { NotFound } from './pages/NotFound'
 import { PreviewFullScreen } from './pages/PreviewFullScreen'
 
 function App() {
-  const location = useLocation();
-  const path = location.pathname;
-  const isSubmissionPage = /^\/challenges\/\d+\/submissions\/\d+$/.test(path);
-  const isPreviewPage = location.pathname.includes('/preview');
+  const { pathname } = useLocation();
+  const isSubmissionPage = /^\/challenges\/\d+\/submissions\/\d+$/.test(pathname);
+  const isPreviewPage = pathname.includes('/preview');
 
   return (
     <div
