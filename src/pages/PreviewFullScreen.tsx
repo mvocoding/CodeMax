@@ -42,7 +42,7 @@ export const PreviewFullScreen: React.FC<Props> = ({ className }) => {
 
     return (
         <LazyLoading isLoading={!combineHTML}>
-            <HtmlIframe htmlContent={combineHTML} />
+            <HtmlIframe htmlContent={combineHTML!} />
         </LazyLoading>
     )
 }
