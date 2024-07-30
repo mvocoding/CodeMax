@@ -7,13 +7,12 @@ import { useApp } from "../context/AppContext";
 import HtmlIframe from "../components/HtmlIframe";
 import { useSubmissionStore } from "../store/useSubmissionStore";
 import { LazyLoading } from "../components/LazyLoading";
+import { MonacoEditor } from "../model";
 
 interface Props {
     className?: string;
 }
-interface MonacoEditor{
-    getValue: () => string;
-}
+
 export const Submission: React.FC<Props> = ({ className }) => {
     const { challengeid, submissionid } = useParams();
     const { currentUser } = useApp();

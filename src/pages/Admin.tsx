@@ -69,7 +69,6 @@ export const Admin: React.FC<Props> = ({ className }) => {
             `,
             className
         )}>
-            {console.log(errors)}
             <FormProvider {...methods}>
                 <form onSubmit={handleSubmit(onSubmit)} className={`overflow-scroll relative text-lg mx-auto flex 
                 rounded-br-xl rounded-bl-xl justify-center max-w-[70%] bg-[#2C2446]

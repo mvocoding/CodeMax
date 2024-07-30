@@ -1,5 +1,3 @@
-import { Editor } from "@monaco-editor/react";
-import Tab from "../components/Tab";
 import { useSupabase } from "../context/SupabaseContext";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";

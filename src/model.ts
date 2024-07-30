@@ -51,3 +51,8 @@ export const signInSchema = z.object({
 export type SignupForm = z.infer<typeof signUpSchema>;
 export type SigninForm = z.infer<typeof signInSchema>;
 
+
+
+export interface MonacoEditor{
+    getValue: () => string;
+}
