@@ -7,6 +7,22 @@ interface Props {
     submissionsList: any[];
 }
 
+const createHTML = (html: string, css: string, js: string) => {
+    const combinedHtml = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <style>${css}</style>
+        </head>
+        <body>
+            ${html}
+            <script>${js}</script>
+        </body>
+        </html>
+    `;
+    return combinedHtml;
+}
+
 export const SubmissionPost: React.FC<Props> = ({ className, submissionsList }) => {
     const navigate = useNavigate();
     return (
@@ -29,7 +45,10 @@ export const SubmissionPost: React.FC<Props> = ({ className, submissionsList }) 
                         className="">
                         <div className="p-3">
                             <HtmlIframe className="h-[20rem] min-w-full"
-                            src={`/preview/${submission.submission_id}`} type="src" scrollbar="no"></HtmlIframe>
+                            src={createHTML(submission.submission_code.html, 
+                                submission.submission_code.css,
+                                submission.submission_code.js
+                            )} scrollbar="no"></HtmlIframe>
                         </div>
                         <div className="p-3 space-y-1">
                             <p className="uppercase font-semibold">{submission.challenge_name}</p>

@@ -117,7 +117,7 @@ export const Submission: React.FC<Props> = ({ className }) => {
                     {
                         title: 'Preview',
                         content: (
-                            <HtmlIframe className="min-h-screen min-w-full" height="100%" width="100%" htmlContent={combineHTML!} />
+                            <HtmlIframe className="min-h-screen min-w-full" height="100%" width="100%" src={combineHTML!} />
                         )
                     },
                 ]}></Tab>

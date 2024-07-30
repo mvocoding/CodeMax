@@ -3,7 +3,6 @@ import React from 'react';
 import { twMerge } from 'tailwind-merge';
 
 interface HtmlIframeProps {
-  htmlContent?: string;
   width?: string;
   height?: string;
   title?: string;
@@ -14,7 +13,6 @@ interface HtmlIframeProps {
 }
 
 const HtmlIframe: React.FC<HtmlIframeProps> = ({
-  htmlContent = '',
   width = '100%',
   height = '250px',
   title = 'HTML Frame',
@@ -28,10 +26,12 @@ const HtmlIframe: React.FC<HtmlIframeProps> = ({
   };
 
   let iframeSrc = undefined;
-  if (type === 'string')
-    iframeSrc = createIframeSrc(htmlContent);
-  else
+  if (type === 'string'){
+    iframeSrc = createIframeSrc(src!);
+  }
+  else{
     iframeSrc = src;
+  }
 
   return (
     <iframe
