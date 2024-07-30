@@ -42,7 +42,7 @@ export const AppProvider: React.FC<Props> = ({ children }) => {
             setCurrentUserState(JSON.parse(savedUser));
             supabase.auth.setSession(JSON.parse(savedSession) as SupabaseAuth);
         }
-        else{
+        else {
             setCurrentUserState({
                 id: '',
                 profile: {
@@ -59,14 +59,19 @@ export const AppProvider: React.FC<Props> = ({ children }) => {
         setCurrentUserState(user);
         if (user)
             localStorage.setItem('supabase.auth.user', JSON.stringify(user));
-        else 
+        else
             localStorage.removeItem('supabase.auth.user');
     }
 
     const signout = async () => {
         const { error } = await supabase.auth.signOut();
-        if(!error){
-            setCurrentUser(null);
+        if (!error) {
+            setCurrentUser({
+                id: '',
+                profile: {
+                    username: ''
+                }
+            });
         }
         return { error };
     }

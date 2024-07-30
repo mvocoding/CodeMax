@@ -10,6 +10,10 @@ import { useToast } from "../context/ToastContext";
 import { useNavigate, useParams } from "react-router-dom";
 import { LazyLoading } from "../components/LazyLoading";
 import { SubmissionPost } from "../components/SubmissionPost";
+import { FaGithub } from "react-icons/fa";
+import { CiLinkedin } from "react-icons/ci";
+import { TbWorldWww } from "react-icons/tb";
+import { IoIosLogOut } from "react-icons/io";
 
 interface Props {
     className?: string;
@@ -38,9 +42,7 @@ export const Profile: React.FC<Props> = ({ className }) => {
             btns: (
                 <>
                     <button className="btn-primary" type="button"
-                        onClick={(e) => { e.preventDefault(); setFormState('edit') }}>Edit My Profile</button>
-                    <button className="btn-primary" type="button"
-                        onClick={(e) => { navigate('/challenges')}}>Start Another Challenge</button>
+                        onClick={(e) => { e.preventDefault(); setFormState('edit') }}>Edit</button>
                 </>
             )
         },
@@ -58,7 +60,7 @@ export const Profile: React.FC<Props> = ({ className }) => {
             formClass: '[&_.form-wrapper]:space-y-5',
             btns: (
                 <>
-                    <button className="btn-primary" type="submit">Saves Change</button>
+                    <button className="btn-primary" type="submit">Save</button>
                     <button className="btn" type="button" onClick={() => setFormState('owner')}>Back</button>
                 </>
             )
@@ -156,7 +158,7 @@ export const Profile: React.FC<Props> = ({ className }) => {
     if (!profile || !submissions) return;
 
     return (
-        <section className={twMerge(`relative mt-10 fade-in-up
+        <section className={twMerge(`relative mt-14 fade-in-up
             `,
             className
         )}>
@@ -165,39 +167,52 @@ export const Profile: React.FC<Props> = ({ className }) => {
                     onSubmit={handleSubmit(onSubmit)}
                     data-state={formState}
                     className={`
+                max-w-[90%] lg:max-w-[60%]
                 ${formClass}
-                min-h-[18rem]
                 relative text-lg mx-auto flex flex-col justify-center max-md:items-center md:flex-row
-                rounded-xl items-start max-w-[80%] bg-[#2C2446]
+                rounded-xl items-start  bg-[#2C2446]
                 [&_label]:min-w-[7rem]
                 [&_.field>input]:flex-1
-                *:p-5 md:*:p-10
+                
+                [&_.btn-icon]:text-3xl 
+                [&_.btn-icon]:text-gray-200
+                hover:[&_.btn-icon]:text-gray-400
                 `}>
+                    <div className="absolute text-white rounded-tl-xl rounded-tr-xl bottom-full left-12 bg-[#2C2446]
+                    flex gap-x-4 px-2 py-1">
+                        <button className="btn-icon" type="button">
+                            <TbWorldWww />
+                        </button>
+                        <button className="btn-icon" type="button">
+                            <FaGithub />
+                        </button>
+                        <button className="btn-icon" type="button">
+                            <CiLinkedin />
+                        </button>
+                    </div>
 
-                    <div className="w-full md:w-[30%] flex flex-col justify-center items-center gap-5 ">
-                        <img src={profile?.avatar!} alt="Likes Dislikes Stats" className="w-[11rem] aspect-square rounded-full  object-cover object-top" />
-
-                        {formState === "owner" && (
-                            <button type="button"
-                                onClick={handleSignout}
-                                className="btn-secondary">Sign out</button>
-                        )}
-
+                    <div className="p-5 w-full md:w-[30%] flex flex-col justify-center items-center gap-5 ">
+                        <img src={profile!.avatar!} alt="Likes Dislikes Stats" className="w-[11rem] aspect-square rounded-full  object-cover object-top" />
+                        <div className="flex gap-2">
+                            {btns}
+                        </div>
 
                     </div>
-                    <div className="flex-1 form-wrapper max-md:w-full" >
-                        <FormField
-                            className="editable"
-                            name="fullname" id="fullname" label="" type="text" ></FormField>
+                    <div className="p-5 flex-1 form-wrapper max-md:w-full [&_input]:!p-1 [&_input]:capitalize [&_textarea]:!px-2" >
+                        <div className="flex justify-between items-center">
+                            <FormField
+                                className="editable  text-white font-semibold"
+                                name="fullname" id="fullname" label="" type="text" ></FormField>
+                            <button className="btn-icon" onClick={handleSignout} type="button">
+                                <IoIosLogOut />
+                            </button>
+                        </div>
                         <FormField
                             className="editable"
                             name="username" id="username" label="" type="text" ></FormField>
                         <FormField
-                            className="editable"
-                            name="description" id="description" label="" row={2} inputType="textarea" type="text"></FormField>
-                        <div className="btn-wrapper flex flex-col gap-3">
-                            {btns}
-                        </div>
+                            className="editable text-base"
+                            name="description" id="description" label="" row={4} inputType="textarea" type="text"></FormField>
                     </div>
                 </form>
             </FormProvider>
