@@ -9,6 +9,7 @@ import Tab from "../components/Tab";
 import { useEffect, useRef } from "react";
 import { useSupabase } from "../context/SupabaseContext";
 import { useToast } from "../context/ToastContext";
+import { MonacoEditor } from "../model";
 
 interface Props {
     className?: string;
@@ -42,7 +43,7 @@ export const Admin: React.FC<Props> = ({ className }) => {
                 'CSS': htmlEditorRef.current!.getValue(),
                 'JS': htmlEditorRef.current!.getValue()
             },
-            user_id: currentUser?.id,
+            user_id: currentUser?.id!,
             thumbnail: ''
         })
 
@@ -52,12 +53,12 @@ export const Admin: React.FC<Props> = ({ className }) => {
             showToast('error', 'Something went wrong!');
     }
     
-    const htmlEditorRef = useRef(null);
-    const cssEditorRef = useRef(null);
-    const jsEditorRef = useRef(null);
+    const htmlEditorRef = useRef<MonacoEditor | null>(null);
+    const cssEditorRef = useRef<MonacoEditor | null>(null);
+    const jsEditorRef = useRef<MonacoEditor | null>(null);
   
   
-    const handleEditorDidMount = (editor, language) => {
+    const handleEditorDidMount = (editor: MonacoEditor, language: string) => {
       if (language === 'HTML') htmlEditorRef.current = editor;
       if (language === 'CSS') cssEditorRef.current = editor;
       if (language === 'JS') jsEditorRef.current = editor;
