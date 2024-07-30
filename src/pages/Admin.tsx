@@ -10,7 +10,7 @@ import { useEffect, useRef } from "react";
 import { useSupabase } from "../context/SupabaseContext";
 import { useToast } from "../context/ToastContext";
 import { MonacoEditor } from "../model";
-import { DEFAULT_CHALLENGE_CSS, DEFAULT_CHALLENGE_HTML, DEFAULT_CHALLENGE_JS } from "../data";
+import { DEFAULT_CHALLENGE_CSS, DEFAULT_CHALLENGE_DESCRIPTION, DEFAULT_CHALLENGE_HTML, DEFAULT_CHALLENGE_JS } from "../data";
 
 interface Props {
     className?: string;
@@ -81,7 +81,8 @@ export const Admin: React.FC<Props> = ({ className }) => {
                         <FormField
                             name="name" id="name" label="Challenge Name: " type="text"></FormField>
                         <FormField
-                            name="description" id="description" label="Challenge Description: " row={5} inputType="textarea" type="text"></FormField>
+                            name="description" id="description" label="Challenge Description: " row={5} inputType="textarea" type="text"
+                            defaultValue={DEFAULT_CHALLENGE_DESCRIPTION}></FormField>
                         <Tab className="" tabsList={[
                             {
                                 title: 'HTML',
