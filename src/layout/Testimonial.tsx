@@ -5,9 +5,11 @@ interface Props {
 }
 
 const RANDOM_QUOTE: string[] = [
-    'Hi, I’m Max. I created this website to help people accelerate their learning process. When it comes to picking up a new language or technology, finding the right tools and resources can make all the difference. That’s why I developed CodeMax — to provide an intuitive interface and powerful features that streamline your workflow and make coding more efficient and enjoyable. I hope you find it as valuable as I do!',
+    'Hi, I’m Max. I created this website to help people accelerate their learning process. When it comes to picking up a new language or technology, finding the right tools and resources can make all the difference. That’s why I developed CodeMax to make coding more efficient and enjoyable. I hope you find it as valuable as I do!',
 
+    'Hi, I’m Max. I created this site to make learning new coding skills easier and more enjoyable. I hope CodeDeck helps you streamline your workflow and boosts your productivity. If you have any questions or feedback, feel free to reach out!',
 
+    'Hey, I’m Max. I know how challenging it can be to learn a new language, so I created CodeMax to help with that. I’ve found that learning from others can really accelerate the process, and I hope CodeMax makes your learning journey smoother and faster.'
 ]
 export const Testimonial: React.FC<Props> = ({ className }) => {
     const randomIndex = Math.floor(Math.random() * RANDOM_QUOTE.length);

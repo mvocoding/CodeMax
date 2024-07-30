@@ -25,6 +25,12 @@ interface SupabaseContextProps {
 
     getSubmissionDetail: (submissionID: number) => Promise<any>;
     getUserProfileByID: (userID: string) => Promise<any>;
+    createChallenge: (param_userid: string,
+        params_tags: string[],
+        param_rating: string,
+        param_name: string,
+        param_description: string,
+        param_code: any) => Promise<any>;
 }
 interface Props {
     children: ReactNode;
@@ -372,11 +378,39 @@ export const SupabaseProvider: React.FC<Props> = ({ children }) => {
         }
     }
 
+    const createChallenge = async (param_userid: string,
+        params_tags: string[],
+        param_rating: string,
+        param_name: string,
+        param_description: string,
+        param_code: any): Promise<any> => {
+        try {
+            const { error, data } = await supabase.rpc('create_challenge', {
+                param_userid: param_userid,
+                params_tags: params_tags,
+                param_rating: param_rating,
+                param_name: param_name,
+                param_description: param_description,
+                param_code: param_code,
+            }).single();
+            return {
+                error,
+                data
+            }
+        }
+        catch (error) {
+            return {
+                error: true,
+                data: null
+            }
+        }
+    }
+
     return (
         <SupabaseContext.Provider value={{
             supabase, signup, signin, addNewPost, getChallenges, getUserSubmission, submitPost, checkUsernameAvailability,
             updateUserProfile, getUserProfile, getChallengeWithSubmission, getChallengeById, createOrUpdateSubmission, updateSubmission,
-            getSubmissionbyID, getSubmissionsByUsername, getSubmissionDetail, getUserProfileByID
+            getSubmissionbyID, getSubmissionsByUsername, getSubmissionDetail, getUserProfileByID, createChallenge
         }}>
             {children}
         </SupabaseContext.Provider>

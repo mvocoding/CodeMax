@@ -44,15 +44,6 @@ export const Submission: React.FC<Props> = ({ className }) => {
         fetchData();
     }, [currentUser, challengeid, getSubmissionDetail, navigate, setFormData]);
 
-    // useEffect(() => {
-    //     const autoSave = setInterval(() => {
-    //         if (formData) {
-    //             console.log('Auto saving...');
-    //         }
-    //     }, 60000);
-    //     return () => clearInterval(autoSave);
-    // }, [formData, setFormData]);
-
     const createHTML = (html: string, css: string, js: string) => {
         const combinedHtml = `
             <!DOCTYPE html>

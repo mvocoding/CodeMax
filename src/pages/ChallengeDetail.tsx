@@ -54,7 +54,7 @@ export const ChallengeDetail: React.FC<Props> = ({ className }) => {
                 </div>
                 <div className="p-10 space-y-8">
                     <h2 className="text-xl">Challenge: <span className="font-semibold capitalize">{challenge?.name}</span></h2>
-                    <p>{challenge?.description}</p>
+                    <p className="whitespace-pre-line leading-6">{challenge?.description}</p>
                     <div className="flex flex-col *:w-full gap-5 *:rounded-lg *:py-2">
                         <button onClick={handleStartChallengeClick} className="btn-primary">Start This Challenge</button>
                         <Link to={'/challenges'} className="btn-dark">View All Challenges</Link>
