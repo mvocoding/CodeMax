@@ -16,15 +16,17 @@ const TabButton: React.FC<TabButtonProps> = ({ title, isActive, onClick }) => (
 )
 
 interface TabContentProps {
+    className?: string;
     content: React.ReactNode;
     isActive: boolean;
 }
 
-const TabContent: React.FC<TabContentProps> = ({ content, isActive }) => {
+const TabContent: React.FC<TabContentProps> = ({ className, content, isActive }) => {
     return (
         <div 
-            className={twMerge('absolute w-full transition-all duration-300 leading-6 text-sm h-full',
-                isActive ? ' left-0 visible ' : ' left-[1000px] invisible '
+            className={twMerge('relative w-full transition-all duration-300 leading-6 text-sm h-full',
+                isActive ? ' left-0 visible' : ' left-[1000px] invisible ',
+                className
             )}>{content}</div>
     )
 }
@@ -38,7 +40,7 @@ export const Tab: React.FC<Props> = ({ tabsList, className, orientation = 'horiz
     const [activeTab, setActiveTab] = useState(0);
 
     return (
-        <div className={twMerge(`grid ${orientation == 'horizontal' ? ' grid-rows-[auto_1fr] ' : ' grid-cols-[150px_1fr]'} h-full `,
+        <div className={twMerge(`grid ${orientation == 'horizontal' ? ' grid-rows-[auto_1fr] ' : ' grid-cols-[150px_1fr]'} `,
             className
         )}>
             <div className={`grid ${ orientation == 'horizontal' ? ' [grid-template-columns:repeat(auto-fit,minmax(150px,1fr))] [grid-auto-rows:1fr] '
@@ -51,9 +53,11 @@ export const Tab: React.FC<Props> = ({ tabsList, className, orientation = 'horiz
                 ))}
             </div>
             <div className={`bg-black/40 ring-8 ring-black/5 border border-zinc-700/30 
-            relative`}>
+            relative grid [grid-template-areas:'stack'] min-h-screen overflow-scroll `}>
                 {tabsList.map((tab, index) => (
-                    <TabContent key={index} content={tab.content} isActive={index == activeTab}></TabContent>
+                    <TabContent 
+                    className="[grid-area:stack]"
+                    key={index} content={tab.content} isActive={index == activeTab}></TabContent>
                 ))}
             </div>
         </div>

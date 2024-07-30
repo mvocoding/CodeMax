@@ -72,10 +72,11 @@ export const Admin: React.FC<Props> = ({ className }) => {
             className
         )}>
             <FormProvider {...methods}>
-                <form onSubmit={handleSubmit(onSubmit)} className={`overflow-scroll relative text-lg mx-auto flex 
+                <form onSubmit={handleSubmit(onSubmit)} className={`relative text-lg mx-auto flex 
                 rounded-br-xl rounded-bl-xl justify-center max-w-[70%] bg-[#2C2446]
                 [&_label]:min-w-[7rem]
                 [&_.field>input]:flex-1
+                [&_canvas]:!relative
                 `}>
                     <div className="flex-1 p-10">
                         <FormField

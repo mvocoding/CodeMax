@@ -52,7 +52,7 @@ export const Profile: React.FC<Props> = ({ className }) => {
             btns: (
                 <>
             <button className="btn-primary" type="submit">Saves Change</button>
-            <button className="btn" type="submit">Back</button>
+            <button className="btn" type="button" onClick={() => setFormState('idle')}>Back</button>
             </>
         )
         }
@@ -160,6 +160,7 @@ export const Profile: React.FC<Props> = ({ className }) => {
 
                     <div className="w-full md:w-[30%] flex flex-col justify-center items-center gap-10 ">
                         <img src={profile?.avatar!} alt="Likes Dislikes Stats" className="w-[11rem] aspect-square rounded-full  object-cover object-top" />
+                        <button className="btn-secondary">Sign out</button>
                        
                     </div>
                     <div className="flex-1 form-wrapper">

@@ -23,26 +23,27 @@ interface FilterProps {
 
 const RATING_SELECT = [
     {
-        rating: -1,
-        text: 'All Level',
-        description: 'High-quality content to enhance your coding skills'
+        "rating": -1,
+        "text": "All Levels",
+        "description": "Show all content regardless of skill level."
     },
     {
-        rating: 1,
-        text: 'Beginner',
-        description: 'High-quality content to enhance your coding skills'
+        "rating": 1,
+        "text": "Beginner",
+        "description": "Basic content for those new to the topic."
     },
     {
-        rating: 2,
-        text: 'Intermediate',
-        description: 'High-quality content to enhance your coding skills'
+        "rating": 2,
+        "text": "Intermediate",
+        "description": "Content for those with some experience."
     },
     {
-        rating: 3,
-        text: 'Advanced',
-        description: 'High-quality content to enhance your coding skills'
+        "rating": 3,
+        "text": "Advanced",
+        "description": "Advanced content for experienced individuals."
     }
 ]
+
 
 const FilterPanel: React.FC<FilterProps> = ({ className, onChangeRating, currentFilter }) => {
     return (

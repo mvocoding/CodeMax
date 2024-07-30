@@ -34,8 +34,6 @@ export const FormField: React.FC<Props> = ({
             [&_.input]:p-3
             [&_.input]:w-full
             [&_.input]:rounded-md
-            [&_.input]:transition-all
-            [&_.input]:duration-300
             [&_.input]:bg-zinc-900
             focus:[&_.input]:bg-zinc-900
             focus:[&_.input]:outline-none

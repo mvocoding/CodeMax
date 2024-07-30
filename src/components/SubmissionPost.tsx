@@ -8,13 +8,12 @@ interface Props {
 
 export const SubmissionPost: React.FC<Props> = ({ className, submissionsList }) => {
     const navigate = useNavigate();
-    debugger;
     return (
         <section
             className={twMerge(`mt-10 slide-in flex `,
                 className
             )}>
-            <div className={`w-full grid grid-cols-1 md:grid-cols-3 gap-6
+            <div className={`w-full grid grid-cols-1 md:grid-cols-3 gap-2
                 *:rounded-xl
                 *:transition
                 *:durartion-300
