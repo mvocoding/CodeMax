@@ -11,6 +11,7 @@ interface FormData{
     challenger_name?: string;
     challenges_id?: string;
     username?: string;
+    challenge_thumbnail?: string;
 }
 
 interface SubmissionStore{

@@ -90,7 +90,7 @@ export const Submission: React.FC<Props> = ({ className }) => {
                 <Tab tabsList={[
                     {
                         title: 'Challenge',
-                        content: (<HtmlIframe htmlContent={`<img src='https://icodethis.com/images/projects/social_profile_2.jpeg'/>`} />)
+                        content: (<img src={formData?.challenge_thumbnail} alt="Challenge Thumbnail"/>)
                     },
 
                     {
