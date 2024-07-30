@@ -16,7 +16,7 @@ export const SubmissionHeader: React.FC<Props> = ({ className }) => {
     const { updateSubmission } = useSupabase();
     const { currentUser } = useApp();
     const { showToast } = useToast();
-    const navigate  = useNavigate();
+    const navigate = useNavigate();
     const [menu, setMenu] = useState<MenuOption | null>(null);
 
     const handleSaveClick = async () => {
@@ -40,8 +40,8 @@ export const SubmissionHeader: React.FC<Props> = ({ className }) => {
         }
     }
     const handleTryChallengeClick = async () => {
-        if(menu === "GUESS"){
-            if(!currentUser?.id){
+        if (menu === "GUESS") {
+            if (!currentUser?.id) {
                 showToast("error", 'You need to login to Try this Challenge!');
                 return;
             }
@@ -50,7 +50,7 @@ export const SubmissionHeader: React.FC<Props> = ({ className }) => {
         }
     }
 
-    
+
     const MENULIST: Record<MenuOption, {
         text: string;
         onClick: () => void;
@@ -85,7 +85,7 @@ export const SubmissionHeader: React.FC<Props> = ({ className }) => {
     }
 
     useEffect(() => {
-        if(formData && currentUser){
+        if (formData && currentUser) {
             const currentMenu: MenuOption = currentUser?.profile.username == formData.username ? 'OWNER' : 'GUESS';
             setMenu(currentMenu);
         }
@@ -99,7 +99,9 @@ export const SubmissionHeader: React.FC<Props> = ({ className }) => {
         )}>
             <div className=" flex items-center justify-between">
                 <div className="max-sm:hidden">
-                    <Link to={'/'} className="tracking-widest uppercase font-bold text-3xl text-sky-600 translate-x-8 sm:translate-x-0">CODEMAX</Link>
+                    <Link to={'/'} className="block w-16">
+                        <img src="/images/logo.png" alt="Logo"/>
+                    </Link>
                 </div>
                 <div className="max-md:hidden">
                     <p className="font-semibold text-xl uppercase">{formData!.challenger_name}</p>
@@ -129,8 +131,8 @@ export const SubmissionHeader: React.FC<Props> = ({ className }) => {
                         hover:before:[&_li]:inset-0
                     ">
                     {MENULIST[menu].map((option, index) => (
-                        <li  key={index} className={option.className}
-                        onClick={option.onClick}>{option.text}</li>
+                        <li key={index} className={option.className}
+                            onClick={option.onClick}>{option.text}</li>
                     ))}
                 </ul>
             </div>

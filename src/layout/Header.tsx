@@ -71,7 +71,9 @@ export const Header: React.FC<Props> = ({ className }) => {
             className
         )}>
             <div className=" flex items-center justify-between">
-                <Link to={'/'} className="max-md:hidden tracking-widest uppercase font-bold text-3xl text-sky-600 translate-x-8 sm:translate-x-0">CODEMAX</Link>
+                <Link to={'/'} className="block w-16">
+                    <img src="/images/logo.png" alt="Logo" />
+                </Link>
 
                 <nav className="absolute left-0 sm:static top-4 w-full max-w-6xl mx-auto flex items-center">
                     <input type="checkbox" className="peer sr-only" id="nav" />
