@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
-import { User } from "../model";
+import { SupabaseAuth, User } from "../model";
 import { useSupabase } from "./SupabaseContext";
 
 interface AppContextProps {
@@ -7,6 +7,7 @@ interface AppContextProps {
     setCurrentUser: (user: User) => void;
     setCurrentSession: (session: any) => void;
     currentUser: User | null;
+    signout: () => any;
 }
 interface Props {
     children: ReactNode;
@@ -39,7 +40,7 @@ export const AppProvider: React.FC<Props> = ({ children }) => {
         const savedSession = localStorage.getItem('supabase.auth.session');
         if (savedUser && savedSession) {
             setCurrentUserState(JSON.parse(savedUser));
-            supabase.auth.setSession(savedSession);
+            supabase.auth.setSession(JSON.parse(savedSession) as SupabaseAuth);
         }
         else{
             setCurrentUserState({
@@ -54,7 +55,7 @@ export const AppProvider: React.FC<Props> = ({ children }) => {
     const showLoader = (value: boolean) => {
         setLoaderVisible(value);
     }
-    const setCurrentUser = (user: User) => {
+    const setCurrentUser = (user: User | null) => {
         setCurrentUserState(user);
         if (user)
             localStorage.setItem('supabase.auth.user', JSON.stringify(user));
@@ -62,6 +63,13 @@ export const AppProvider: React.FC<Props> = ({ children }) => {
             localStorage.removeItem('supabase.auth.user');
     }
 
+    const signout = async () => {
+        const { error } = await supabase.auth.signOut();
+        if(!error){
+            setCurrentUser(null);
+        }
+        return { error };
+    }
     const setCurrentSession = (session: any) => {
         if (session)
             localStorage.setItem('supabase.auth.session', JSON.stringify(session));
@@ -70,7 +78,7 @@ export const AppProvider: React.FC<Props> = ({ children }) => {
     }
 
     return (
-        <AppContext.Provider value={{ showLoader, currentUser, setCurrentUser, setCurrentSession }}>
+        <AppContext.Provider value={{ showLoader, currentUser, setCurrentUser, setCurrentSession, signout }}>
             <LoaderOverlay isVisible={loaderVisible}></LoaderOverlay>
             {children}
         </AppContext.Provider>

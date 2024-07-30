@@ -21,7 +21,7 @@ interface FormStateProps {
 }
 
 export const Profile: React.FC<Props> = ({ className }) => {
-    const { currentUser, setCurrentUser } = useApp();
+    const { currentUser, setCurrentUser, signout } = useApp();
     const [profile, setProfile] = useState(null);
     const [submissions, setSubmissions] = useState<any[] | null>(null);
     const { checkUsernameAvailability, updateUserProfile, getUserProfile, getSubmissionsByUsername } = useSupabase();
@@ -35,7 +35,7 @@ export const Profile: React.FC<Props> = ({ className }) => {
                  [&_.editable_.input]:border-0
                  [&_.editable_.input]:pointer-events-none
                   `,
-            btns: currentUser?.profile.username === id ? (
+            btns: currentUser!.profile!.username === id ? (
                 <>
                     <button className="btn-primary" type="button"
                         onClick={(e) => { e.preventDefault(); setFormState('edit') }}>Edit My Profile</button>
@@ -62,7 +62,7 @@ export const Profile: React.FC<Props> = ({ className }) => {
     const schema = z.object({
         username: z.string().min(6)
             .refine(async (username) => {
-                if (username != currentUser?.profile.username)
+                if (username != currentUser!.profile!.username)
                     return await checkUsernameAvailability(username);
                 return true;
             }, { message: 'Username is taken' }),
@@ -96,7 +96,7 @@ export const Profile: React.FC<Props> = ({ className }) => {
 
     const setupProfile = async (username: string) => {
         let tempProfile = null;
-        if (currentUser!.profile.username == id) {
+        if (currentUser!.profile!.username == id) {
             tempProfile = {
                 ...currentUser!.profile,
                 is_editable: true
@@ -137,6 +137,13 @@ export const Profile: React.FC<Props> = ({ className }) => {
         }
     }
 
+    const handleSignout = async () => {
+        const { error } = await signout();
+        showToast("success", "Hope we can see you again!");
+        navigate('/signin');
+        return;
+    }
+
     if (!profile || !submissions) return;
 
     return (
@@ -160,7 +167,9 @@ export const Profile: React.FC<Props> = ({ className }) => {
 
                     <div className="w-full md:w-[30%] flex flex-col justify-center items-center gap-10 ">
                         <img src={profile?.avatar!} alt="Likes Dislikes Stats" className="w-[11rem] aspect-square rounded-full  object-cover object-top" />
-                        <button className="btn-secondary">Sign out</button>
+                        <button 
+                        onClick={handleSignout}
+                        className="btn-secondary">Sign out</button>
                        
                     </div>
                     <div className="flex-1 form-wrapper">

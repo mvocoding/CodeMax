@@ -5,22 +5,27 @@ export interface TabItem{
     content: React.ReactNode;
 }
 
+export interface SupabaseAuth{
+    access_token: string;
+    refresh_token: string;
+}
+
 export interface User{
-    id: string;
-    created_at: string;
-    email: string;
-    user_metadata: {
+    id?: string;
+    created_at?: string;
+    email?: string;
+    user_metadata?: {
         email_verified: boolean;
     }
-    profile: {
-        avatar: string;
-        created_at: string;
-        description: string;
-        fullname: string;
-        likes: number;
-        role: string;
-        user_id: string;
-        username: string;
+    profile?: {
+        avatar?: string;
+        created_at?: string;
+        description?: string;
+        fullname?: string;
+        likes?: number;
+        role?: string;
+        user_id?: string;
+        username?: string;
     }
 }
 
