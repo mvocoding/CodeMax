@@ -21,7 +21,7 @@ function App() {
 
   return (
     <div
-      className={`w-full bg-zinc-900 text-zinc-200  min-h-screen pb-28
+      className={`w-full bg-zinc-900 text-zinc-200  min-h-screen
             text-base`}>
       {isSubmissionPage ? <SubmissionHeader className='fade-in-down' /> : isPreviewPage ? undefined : <Header className='fade-in-down' />}
       <Routes>

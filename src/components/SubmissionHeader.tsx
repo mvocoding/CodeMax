@@ -58,6 +58,10 @@ export const SubmissionHeader: React.FC<Props> = ({ className }) => {
     }[]> = {
         'OWNER': [
             {
+                text: 'Back',
+                onClick: () => navigate(`/challenges/${formData?.challenges_id}/submissions`),
+            },
+            {
                 text: 'Preview',
                 onClick: () => window.open(`/preview/${formData?.submission_id}`, '_blank'),
             },
