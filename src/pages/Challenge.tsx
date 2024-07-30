@@ -1,99 +1,110 @@
-import { twMerge } from "tailwind-merge";
+import { twJoin, twMerge } from "tailwind-merge";
 import { ChallengePost } from "../components/ChallengePost";
 import { useEffect, useState } from "react";
 import { useSupabase } from "../context/SupabaseContext";
 import { LazyLoading } from "../components/LazyLoading";
+import { StarRating } from "../components/StarRating";
 
 interface Props {
     className?: string;
 }
+interface Filter {
+    name: string;
+    tags: string[];
+    rating: number;
+    currentPage: number;
+    pageSize: number;
+}
+interface FilterProps {
+    className?: string;
+    currentFilter: Filter;
+    onChangeRating: (rating: number) => void;
+}
+
+const RATING_SELECT = [
+    {
+        rating: -1,
+        text: 'All Level',
+        description: 'High-quality content to enhance your coding skills'
+    },
+    {
+        rating: 1,
+        text: 'Beginner',
+        description: 'High-quality content to enhance your coding skills'
+    },
+    {
+        rating: 2,
+        text: 'Intermediate',
+        description: 'High-quality content to enhance your coding skills'
+    },
+    {
+        rating: 3,
+        text: 'Advanced',
+        description: 'High-quality content to enhance your coding skills'
+    }
+]
+
+const FilterPanel: React.FC<FilterProps> = ({ className, onChangeRating, currentFilter }) => {
+    return (
+        <section className={twMerge(`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 *:cursor-pointer
+            *:border *:rounded-lg *:border-sky-500`,
+            className
+        )}>
+            {RATING_SELECT.map((option, index) => (
+                <div key={index}
+                    onClick={() => onChangeRating(option.rating)}
+                    className={twJoin(`flex items-center p-2 md:p-6`,
+                        currentFilter.rating == option.rating && 'bg-purple-600/50'
+                    )}>
+                    <div>
+                        <h4 className="text-xl font-semibold flex gap-2 items-center">
+                            <StarRating rating={option.rating}></StarRating>
+                            <p>{option.text}</p>
+                        </h4>
+                        <p className="max-sm:hidden">{option.description}</p>
+                    </div>
+                </div>
+            ))}
+        </section>
+    )
+}
+
 export const Challenge: React.FC<Props> = ({ className }) => {
     const { getChallenges } = useSupabase();
-    const [challenges, setChallenges] = useState<any[]>([]);
+    const [challenges, setChallenges] = useState<any[] | null>([]);
+    const [filter, setFilter] = useState<Filter>({
+        name: '',
+        tags: [],
+        rating: -1,
+        currentPage: 1,
+        pageSize: 1000
+    });
 
     useEffect(() => {
         const fetchData = async () => {
-            const { error, data } = await getChallenges('', [], -1, 1, 1000);
+            const { error, data } = await getChallenges(filter.name, filter.tags, filter.rating, filter.currentPage, filter.pageSize);
             if (error) {
                 return;
             }
             setChallenges(data);
         }
         fetchData();
-    }, []);
+    }, [filter]);
+
+    const setRating = (rating: number) => {
+        setChallenges(null);
+        setFilter(prev => ({
+            ...prev,
+            rating
+        }));
+    }
 
     return (
-        <LazyLoading isLoading={!challenges.length} className="min-h-[400px]">
-            <section className={twMerge(`max-w-[90%] mx-auto
-            `,
+        <LazyLoading isLoading={!challenges} className="min-h-[400px]">
+            <section className={twMerge(`max-w-[90%] mx-auto mt-5`,
                 className
             )}>
-                <div>
-                    <section className={twMerge(`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6
-            *:border *:rounded-lg *:border-sky-500`,
-                        className
-                    )}>
-                        <div className="flex gap-4 items-center p-6">
-                            <div>
-                                <h4 className="text-xl font-semibold flex gap-2 items-center">
-                                    <div className="flex">
-                                        <label className="material-symbols-outlined text-yellow-500">
-                                            star
-                                        </label>
-                                        <label className="material-symbols-outlined">
-                                            star
-                                        </label>
-                                        <label className="material-symbols-outlined">
-                                            star
-                                        </label>
-                                    </div>
-                                    <p>Beginner</p>
-                                </h4>
-                                <p>High-quality content to enhance your coding skills</p>
-                            </div>
-                        </div>
-                        <div className="flex gap-4 items-center p-6">
-                            <div>
-                                <h4 className="text-xl font-semibold flex gap-2 items-center">
-                                    <div className="flex">
-                                        <label className="material-symbols-outlined text-yellow-500">
-                                            star
-                                        </label>
-                                        <label className="material-symbols-outlined text-yellow-500">
-                                            star
-                                        </label>
-                                        <label className="material-symbols-outlined">
-                                            star
-                                        </label>
-                                    </div>
-                                    <p>Intermediate</p>
-                                </h4>
-                                <p>High-quality content to enhance your coding skills</p>
-                            </div>
-                        </div>
-                        <div className="flex gap-4 items-center p-6">
-                            <div>
-                                <h4 className="text-xl font-semibold flex gap-2 items-center">
-                                    <div className="flex">
-                                        <label className="material-symbols-outlined text-yellow-500">
-                                            star
-                                        </label>
-                                        <label className="material-symbols-outlined text-yellow-500">
-                                            star
-                                        </label>
-                                        <label className="material-symbols-outlined text-yellow-500">
-                                            star
-                                        </label>
-                                    </div>
-                                    <p>Advanced</p>
-                                </h4>
-                                <p>High-quality content to enhance your coding skills</p>
-                            </div>
-                        </div>
-
-                        
-                    </section>
-                </div>
+                <FilterPanel currentFilter={filter} onChangeRating={setRating}></FilterPanel>
                 <ChallengePost challengesList={challenges}></ChallengePost>
             </section>
         </LazyLoading>

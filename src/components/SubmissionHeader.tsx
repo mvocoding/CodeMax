@@ -1,58 +1,27 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
 import { useApp } from "../context/AppContext";
-import { User } from "../model";
 import { useSubmissionStore } from "../store/useSubmissionStore";
 import { useSupabase } from "../context/SupabaseContext";
 import { useToast } from "../context/ToastContext";
+import { useEffect, useState } from "react";
 
 interface Props {
     className?: string;
 }
+type MenuOption = 'GUESS' | 'OWNER';
 
-const Guess = () => {
-    return (
-        <div className="flex gap-2 
-        *:border-none
-        *:outline-none
-        *:py-3
-        *:px-4
-        *:rounded-md
-        *:text-sm 
-        *:whitespace-nowrap
-        *:min-w-min
-        *:transition
-        *:durartion-300
-        hover:*:bg-sky-600 
-        last:*:bg-amber-600
-        last:*:text-white">
-            <Link className="btn " to={'/signin'} type="button">Sign In</Link>
-            <Link className="btn " to={'/signup'} type="button">Sign Up</Link>
-        </div>
-    )
-}
-
-const UserSignedIn: React.FC<{ currentUser: User }> = ({ currentUser }) => {
-    return (
-        <div className="flex justify-start items-center gap-3 ">
-            <div className="capitalize text-center">
-                <p className="px-4 py-1 bg-yellow-400 text-purple-900 font-bold rounded-lg">{currentUser.profile.role}</p>
-            </div>
-            <Link className="size-12" to={`/profile/${currentUser.profile.username}`}>
-                <img className="w-full object-cover object-top border border-sky-800 rounded-full" src={'/images/thinking.svg'} alt="User Avatar" />
-            </Link>
-        </div>
-    )
-}
 export const SubmissionHeader: React.FC<Props> = ({ className }) => {
     const { formData } = useSubmissionStore();
     const { updateSubmission } = useSupabase();
     const { currentUser } = useApp();
     const { showToast } = useToast();
+    const navigate  = useNavigate();
+    const [menu, setMenu] = useState<MenuOption | null>(null);
 
     const handleSaveClick = async () => {
         showToast("inprogress", 'Updating your submission...')
-        const { error, data } = await updateSubmission(formData?.id!, formData?.challenge_code!, formData?.draft!);
+        const { error, data } = await updateSubmission(formData?.submission_id!, formData?.submission_code!, formData?.submission_draft!);
         if (error) {
             showToast("error", 'Something went wrong!')
         }
@@ -62,7 +31,7 @@ export const SubmissionHeader: React.FC<Props> = ({ className }) => {
     }
     const handleSubmitClick = async () => {
         showToast("inprogress", 'Submitting your submission...')
-        const { error, data } = await updateSubmission(formData?.id!, formData?.challenge_code!, false);
+        const { error, data } = await updateSubmission(formData?.submission_id!, formData?.submission_code!, false);
         if (error) {
             showToast("error", 'Something went wrong!')
         }
@@ -70,32 +39,83 @@ export const SubmissionHeader: React.FC<Props> = ({ className }) => {
             showToast("success", 'Submit submission successfully !')
         }
     }
+    const handleTryChallengeClick = async () => {
+        if(menu === "GUESS"){
+            if(!currentUser?.id){
+                showToast("error", 'You need to login to Try this Challenge!');
+                return;
+            }
+            navigate(`/challenges/${formData?.challenges_id}/newsubmission`);
+            return;
+        }
+    }
+
+    
+    const MENULIST: Record<MenuOption, {
+        text: string;
+        onClick: () => void;
+        className?: string;
+    }[]> = {
+        'OWNER': [
+            {
+                text: 'Preview',
+                onClick: () => window.open(`/preview/${formData?.submission_id}`, '_blank'),
+            },
+            {
+                text: 'Save',
+                onClick: () => handleSaveClick(),
+            },
+            {
+                text: 'Submit',
+                onClick: () => handleSubmitClick(),
+                className: 'active'
+            }
+        ],
+        'GUESS': [
+            {
+                text: 'View Submissions',
+                onClick: () => navigate(`/challenges/${formData?.challenges_id}/submissions`),
+            },
+            {
+                text: 'Try This',
+                onClick: () => handleTryChallengeClick(),
+                className: 'active'
+            },
+        ]
+    }
+
+    useEffect(() => {
+        if(formData && currentUser){
+            const currentMenu: MenuOption = currentUser?.profile.username == formData.username ? 'OWNER' : 'GUESS';
+            setMenu(currentMenu);
+        }
+    }, [currentUser, formData]);
+
+    if (!menu) return null;
 
     return (
-        <header className={twMerge(`bg-[#2C2446] py-4 relative`,
+        <header className={twMerge(`bg-[#2C2446] p-5 md:px-20 py-4 relative`,
             className
         )}>
             <div className=" flex items-center justify-between">
-                <ul className="bg-zinc-800 sm:bg-transparent overflow-hidden flex   w-full flex-col sm:gap-6 z-20 
-                        sm:flex-row 
-                        sm:items-center
-                        sm:justify-center
-                        *:px-4
-                        *:py-2
-                        sm:*:py-2
+                <div className="max-sm:hidden">
+                    <Link to={'/'} className="tracking-widest uppercase font-bold text-3xl text-sky-600 translate-x-8 sm:translate-x-0">CODEMAX</Link>
+                </div>
+                <div className="max-md:hidden">
+                    <p className="font-semibold text-xl uppercase">{formData!.challenger_name}</p>
+                </div>
+                <ul className="bg-transparent overflow-hidden flex gap-6 z-20 
+                        items-center
+                        justify-center
+                        *:p-2
                         *:relative
-                        *:mx-4
-                        sm:*:mx-0
                         *:transition-all
                         *:duration-300
                         *:rounded-full
                         [&_a]:block
                         [&_li.active]:bg-slate-300
                         [&_li.active]:text-zinc-800
-                        first:*:mt-4
-                        last:*:mb-4
-                        sm:first:*:mt-0
-                        sm:last:*:mb-0
+                        *:cursor-pointer
 
                         before:[&_li]:absolute
                         before:[&_li]:inset-full
@@ -107,9 +127,10 @@ export const SubmissionHeader: React.FC<Props> = ({ className }) => {
                         before:[&_li]:rounded-full
                         hover:before:[&_li]:inset-0
                     ">
-                    <li className="">Preview</li>
-                    <li className="" onClick={handleSaveClick}>Save Changes</li>
-                    <li className="active" onClick={handleSubmitClick}>Submit</li>
+                    {MENULIST[menu].map((option, index) => (
+                        <li  key={index} className={option.className}
+                        onClick={option.onClick}>{option.text}</li>
+                    ))}
                 </ul>
             </div>
         </header>

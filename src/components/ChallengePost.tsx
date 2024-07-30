@@ -1,38 +1,23 @@
-import { Link, useNavigate } from "react-router-dom";
-import { twJoin, twMerge } from "tailwind-merge";
+import { useNavigate } from "react-router-dom";
+import { twMerge } from "tailwind-merge";
+import { StarRating } from "./StarRating";
 
 
 interface Props {
     className?: string;
-    challengesList: any[];
+    challengesList: any[] | null;
     style?: 'primary' | 'secondary';
 }
-interface StarRatingProps {
-    className?: string;
-    rating: number;
-}
-const StarRating: React.FC<StarRatingProps> = ({ className, rating }) => {
-    const MAX_STAR = 3;
 
-    return (
-        <div className={twMerge(`flex`, className)}>
-            {Array.from({ length: MAX_STAR }, (_, index) => (
-                <label className={twJoin("material-symbols-outlined",
-                    index < rating && 'text-yellow-500'
-                )}>
-                    star
-                </label>
-            ))}
-        </div>
-    )
-}
 export const ChallengePost: React.FC<Props> = ({ className, challengesList, style = 'primary' }) => {
     const navigate = useNavigate();
+    if(!challengesList) return;
+
     return (
         <div
             data-style={style}
             className={twMerge(`fade-in-up 
-                mt-10 side-in w-full grid grid-cols-3 gap-6
+                mt-10 side-in w-full grid grid-cols-1 md:grid-cols-3 gap-6
                 *:rounded-xl
                 *:transition
                 *:durartion-300
@@ -59,7 +44,7 @@ export const ChallengePost: React.FC<Props> = ({ className, challengesList, styl
                     btns-wrapper absolute bottom-0 left-0 w-full">
                         <button className="bg-purple-600 w-full py-2 rounded-bl-xl rounded-br-xl font-semibold">START</button>
                     </div>
-                    <div className="top-card bg-purple-900/60 rounded-tr-xl absolute top-0 right-0 px-5 py-2 gap-2 flex items-center ">
+                    <div className="top-card bg-purple-900/60 rounded-tr-xl absolute top-0 right-0 px-5 py-2 gap-2 max-md:w-full flex items-center ">
                         <p className="uppercase font-semibold">{challenge.name}</p>
                         <StarRating rating={challenge.rating}></StarRating>
                     </div>
@@ -74,14 +59,6 @@ export const ChallengePost: React.FC<Props> = ({ className, challengesList, styl
                                 {challenge.tags!.map((tag: string, index: number) => (
                                     <p key={index}>{tag}</p>
                                 ))}
-                            </div>
-                        </div>
-                        <div className="flex gap-5">
-                            <div className="flex flex-col text-sm items-center">
-                                <span className="material-symbols-outlined text-gray-500">
-                                    visibility
-                                </span>
-                                <span>1000</span>
                             </div>
                         </div>
                     </div>

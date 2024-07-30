@@ -22,6 +22,8 @@ interface SupabaseContextProps {
     updateSubmission: (submissionid: string, code: Record<string, string>, draft: boolean) => Promise<any>;
     getSubmissionbyID: (submissionid: string) => Promise<any>;
     getSubmissionsByUsername: (username: string) => Promise<any>;
+
+    getSubmissionDetail: (submissionID: number) => Promise<any>;
 }
 interface Props {
     children: ReactNode;
@@ -227,6 +229,14 @@ export const SupabaseProvider: React.FC<Props> = ({ children }) => {
         }
     }
 
+    const getSubmissionDetail = async (submissionID: number): Promise<any> => {
+        try {
+            const { data, error } = await supabase.rpc('get_submissions_by_submissionid', { param_submissionid: submissionID }).single();
+            return { error, data };
+        } catch (error) {
+            return { error: true, data: null };
+        }
+    };
 
     const getChallenges = async (name: string, tag: string[], rating: number, pagenumber: number, pagesize: number): Promise<any> => {
         try {
@@ -252,7 +262,7 @@ export const SupabaseProvider: React.FC<Props> = ({ children }) => {
 
     const getChallengeById = async (id: string): Promise<any> => {
         try {
-            const {error, data}  = await supabase.rpc('get_challenge_byid', {
+            const { error, data } = await supabase.rpc('get_challenge_byid', {
                 challenge_id: id
             }).single()
             return {
@@ -266,11 +276,11 @@ export const SupabaseProvider: React.FC<Props> = ({ children }) => {
                 data: null
             }
         }
-    }    
+    }
 
     const getSubmissionbyID = async (submissionid: string): Promise<any> => {
         try {
-            const {error, data}  = await supabase.rpc('get_submission_byid', {
+            const { error, data } = await supabase.rpc('get_submission_byid', {
                 param_submissionid: submissionid
             }).single()
             return {
@@ -284,18 +294,18 @@ export const SupabaseProvider: React.FC<Props> = ({ children }) => {
                 data: null
             }
         }
-    }   
-    
+    }
+
     const getChallengeWithSubmission = async (id: string): Promise<any> => {
         try {
-            const [challengeResp, submissionResp]  = await Promise.all([
-                    supabase.rpc('get_challenge_byid', {
-                        challenge_id: id
-                    }).single(),
-                    supabase.rpc('get_submissions_by_challengeid', {
-                        challenge_id: id
-                    }),
-                ]);
+            const [challengeResp, submissionResp] = await Promise.all([
+                supabase.rpc('get_challenge_byid', {
+                    challenge_id: id
+                }).single(),
+                supabase.rpc('get_submissions_by_challengeid', {
+                    challenge_id: id
+                }),
+            ]);
             const { error: challengeError, data: challengeData } = challengeResp;
             const { error: submissionError, data: submissionData } = submissionResp;
             return {
@@ -313,7 +323,7 @@ export const SupabaseProvider: React.FC<Props> = ({ children }) => {
 
     const createOrUpdateSubmission = async (userid: string, challengeid: string): Promise<any> => {
         try {
-            const {error, data}  = await supabase.rpc('create_or_update_draft', {
+            const { error, data } = await supabase.rpc('create_or_update_draft', {
                 param_userid: userid,
                 param_challengeid: challengeid
             }).single();
@@ -329,10 +339,10 @@ export const SupabaseProvider: React.FC<Props> = ({ children }) => {
             }
         }
     }
-    
+
     const updateSubmission = async (submissionid: string, code: Record<string, string>, draft: boolean): Promise<any> => {
         try {
-            const {error, data}  = await supabase.rpc('update_submission', {
+            const { error, data } = await supabase.rpc('update_submission', {
                 param_submissionid: submissionid,
                 param_code: code,
                 param_draft: draft,
@@ -354,7 +364,7 @@ export const SupabaseProvider: React.FC<Props> = ({ children }) => {
         <SupabaseContext.Provider value={{
             supabase, signup, signin, addNewPost, getChallenges, getUserSubmission, submitPost, checkUsernameAvailability,
             updateUserProfile, getUserProfile, getChallengeWithSubmission, getChallengeById, createOrUpdateSubmission, updateSubmission,
-            getSubmissionbyID, getSubmissionsByUsername
+            getSubmissionbyID, getSubmissionsByUsername, getSubmissionDetail
         }}>
             {children}
         </SupabaseContext.Provider>

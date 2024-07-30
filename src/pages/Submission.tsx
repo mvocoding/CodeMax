@@ -14,7 +14,7 @@ interface Props {
 export const Submission: React.FC<Props> = ({ className }) => {
     const { challengeid, submissionid } = useParams();
     const { currentUser } = useApp();
-    const { createOrUpdateSubmission } = useSupabase();
+    const { getSubmissionDetail } = useSupabase();
     const navigate = useNavigate();
     const { formData, setFormData } = useSubmissionStore(state => ({
         formData: state.formData,
@@ -28,26 +28,28 @@ export const Submission: React.FC<Props> = ({ className }) => {
     useEffect(() => {
         const fetchData = async () => {
             if (!currentUser || !challengeid) return;
-            const { error, data } = await createOrUpdateSubmission(currentUser.id, challengeid);
+            const id = parseInt(submissionid!);
+            const { error, data } = await getSubmissionDetail(id);
+
             if (error) {
                 navigate('/notfound', { replace: true });
                 return;
             }
             setFormData(data);
-            setCombineHTML(createHTML(data.challenge_code.html, data.challenge_code.css, data.challenge_code.js));
+            setCombineHTML(createHTML(data.submission_code.html, data.submission_code.css, data.submission_code.js));
         };
 
         fetchData();
-    }, [currentUser, challengeid, createOrUpdateSubmission, navigate, setFormData]);
+    }, [currentUser, challengeid, getSubmissionDetail, navigate, setFormData]);
 
-    useEffect(() => {
-        const autoSave = setInterval(() => {
-            if (formData) {
-                console.log('Auto saving...');
-            }
-        }, 60000);
-        return () => clearInterval(autoSave);
-    }, [formData, setFormData]);
+    // useEffect(() => {
+    //     const autoSave = setInterval(() => {
+    //         if (formData) {
+    //             console.log('Auto saving...');
+    //         }
+    //     }, 60000);
+    //     return () => clearInterval(autoSave);
+    // }, [formData, setFormData]);
 
     const createHTML = (html: string, css: string, js: string) => {
         const combinedHtml = `
@@ -102,21 +104,21 @@ export const Submission: React.FC<Props> = ({ className }) => {
                         content: (<Editor
                             onChange={updateHtmlContent}
                             onMount={(editor) => handleEditorDidMount(editor, 'HTML')}
-                            theme='vs-dark' defaultLanguage="html" defaultValue={formData?.challenge_code?.html} />)
+                            theme='vs-dark' defaultLanguage="html" defaultValue={formData?.submission_code?.html} />)
                     },
                     {
                         title: 'CSS',
                         content: (<Editor
                             onChange={updateHtmlContent}
                             onMount={(editor) => handleEditorDidMount(editor, 'CSS')}
-                            theme='vs-dark' defaultLanguage="css" defaultValue={formData?.challenge_code?.css} />)
+                            theme='vs-dark' defaultLanguage="css" defaultValue={formData?.submission_code?.css} />)
                     },
                     {
                         title: 'JS',
                         content: (<Editor
                             onChange={updateHtmlContent}
                             onMount={(editor) => handleEditorDidMount(editor, 'JS')}
-                            theme='vs-dark' defaultLanguage="javascript" defaultValue={formData?.challenge_code?.js} />)
+                            theme='vs-dark' defaultLanguage="javascript" defaultValue={formData?.submission_code?.js} />)
                     },
                     {
                         title: 'Preview',

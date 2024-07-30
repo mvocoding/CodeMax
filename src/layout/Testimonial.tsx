@@ -6,7 +6,7 @@ interface Props {
 
 export const Testimonial: React.FC<Props> = ({ className }) => {
     return (
-        <section className={twMerge(`hidden md:flex justify-center items-center flex-col gap-10 p-5 bg-white rounded-xl text-gray-800`,
+        <section className={twMerge(`hidden lg:flex justify-center items-center flex-col gap-10 p-5 bg-white rounded-xl text-gray-800`,
             className
         )}>
             <img className="rounded-full w-[200px] mx-auto"

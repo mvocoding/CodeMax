@@ -20,6 +20,8 @@ interface SupabaseStore {
   getChallengeById: (id: string) => Promise<any>;
   createOrUpdateSubmission: (userid: string, challengeid: string) => Promise<any>;
   updateSubmission: (submissionid: string, code: Record<string, string>, draft: boolean) => Promise<any>;
+
+  getSubmissionDetail: (submissionID: number) => Promise<any>;
 }
 
 interface SupabaseResponse {
@@ -105,6 +107,14 @@ export const useSupabaseStore = create<SupabaseStore>((set) => {
         return { error, data };
       } catch (error) {
         return false;
+      }
+    },
+    getSubmissionDetail: async (submissionID: number): Promise<any> => {
+      try {
+        const { data, error } = await supabase.rpc('get_submissions_by_submissionid', { param_submissionid: submissionID });
+        return { error, data };
+      } catch (error) {
+        return { error: true, data: null };
       }
     },
     getUserSubmission: async (userID: string): Promise<any> => {

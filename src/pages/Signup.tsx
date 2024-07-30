@@ -71,7 +71,7 @@ export const Signup: React.FC<Props> = ({ className }) => {
                 </FormProvider>
 
                 <div className="">
-                    <Link to={'/signin'} className="btn-secondary" type="button">
+                    <Link to={'/signin'} className="btn-dark" type="button">
                         <span className="material-symbols-outlined">arrow_left_alt</span>
                         Back to Sign In
                     </Link>

@@ -32,13 +32,13 @@ const Guess = () => {
 const UserSignedIn: React.FC<{ currentUser: User }> = ({ currentUser }) => {
     return (
         <div className="flex justify-start items-center gap-3 ">
-                            <div className="capitalize text-center">
-                                <p className="px-4 py-1 bg-yellow-400 text-purple-900 font-bold rounded-lg">{currentUser.profile.role}</p>
-                            </div>
-                            <Link className="size-12" to={`/profile/${currentUser.profile.username}`}>
-                                <img className="w-full object-cover object-top border border-sky-800 rounded-full" src={'/images/thinking.svg'} alt="User Avatar" />
-                            </Link>
-                        </div>
+            <div className="capitalize text-center">
+                <p className="px-4 py-1 bg-yellow-400 text-purple-900 font-bold rounded-lg">{currentUser.profile.role}</p>
+            </div>
+            <Link className="size-12" to={`/profile/${currentUser.profile.username}`}>
+                <img className="w-full object-cover object-top border border-sky-800 rounded-full" src={'/images/thinking.svg'} alt="User Avatar" />
+            </Link>
+        </div>
     )
 }
 export const Header: React.FC<Props> = ({ className }) => {
@@ -49,7 +49,7 @@ export const Header: React.FC<Props> = ({ className }) => {
             className
         )}>
             <div className=" flex items-center justify-between">
-                <Link to={'/'} className="tracking-widest uppercase font-bold text-3xl text-sky-600 translate-x-8 sm:translate-x-0">CODEMAX</Link>
+                <Link to={'/'} className="max-md:hidden tracking-widest uppercase font-bold text-3xl text-sky-600 translate-x-8 sm:translate-x-0">CODEMAX</Link>
 
                 <nav className="absolute left-0 sm:static top-4 w-full max-w-6xl mx-auto flex items-center">
                     <input type="checkbox" className="peer sr-only" id="nav" />
@@ -117,9 +117,9 @@ export const Header: React.FC<Props> = ({ className }) => {
                         </ul>
                     </div>
                 </nav>
-                <>
+                <div className="ml-auto">
                     {currentUser?.id ? (<UserSignedIn currentUser={currentUser} />) : (<Guess />)}
-                </>
+                </div>
             </div>
         </header>
     )

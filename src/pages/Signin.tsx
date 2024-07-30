@@ -81,7 +81,7 @@ export const Signin: React.FC<Props> = ({ className }) => {
                 </FormProvider>
 
                 <div className="">
-                    <Link to={'/signup'} className={twMerge("btn-secondary", isSubmitting && 'loading')}>
+                    <Link to={'/signup'} className={twMerge("btn-dark", isSubmitting && 'loading')}>
                         Create New Account
                     </Link>
                 </div>

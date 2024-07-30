@@ -160,20 +160,7 @@ export const Profile: React.FC<Props> = ({ className }) => {
 
                     <div className="w-[30%] flex flex-col justify-center items-center gap-10 ">
                         <img src={"https://tailwindflex.com/public/images/" + profile?.avatar!} alt="Likes Dislikes Stats" className="w-[11rem] aspect-square rounded-full  object-cover object-top" />
-                        <div className="w-full flex justify-center gap-10">
-                            <div className="flex flex-col text-sm items-center">
-                                <span className="material-symbols-outlined text-gray-500">
-                                    code
-                                </span>
-                                <span>1000</span>
-                            </div>
-                            <div className="flex flex-col text-sm items-center">
-                                <span className="material-symbols-outlined text-gray-500">
-                                    visibility
-                                </span>
-                                <span>1000</span>
-                            </div>
-                        </div>
+                       
                     </div>
                     <div className="flex-1 form-wrapper">
                         <FormField

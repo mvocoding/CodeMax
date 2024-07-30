@@ -23,8 +23,8 @@ export const Home: React.FC<Props> = ({ className }) => {
 
     return (
         <div className="py-10 fade-in-up"> 
-            <Hero></Hero>
-            <Banner className="max-w-[70%] flex mx-auto"></Banner>
+            <Hero className="max-w-[80%] max-md:max-w-full"></Hero>
+            <Banner className="max-w-[80%] flex mx-auto max-md:hidden"></Banner>
             <LazyLoading isLoading={!challenges}>
                 {/* <Filter></Filter> */}
                 {/* <CategorySelect className="mt-5"></CategorySelect> */}

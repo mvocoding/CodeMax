@@ -1,13 +1,16 @@
 import {create} from 'zustand';
 
 interface FormData{
-    challenge_code?: {
+    submission_code?: {
         html?: string;
         css?: string;
         js?: string;
     },
-    draft?: boolean;
-    id?: string;
+    submission_draft?: boolean;
+    submission_id?: string;
+    challenger_name: string;
+    challenges_id: string;
+    username: string;
 }
 
 interface SubmissionStore{
