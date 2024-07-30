@@ -11,6 +11,9 @@ import { LazyLoading } from "../components/LazyLoading";
 interface Props {
     className?: string;
 }
+interface MonacoEditor{
+    getValue: () => string;
+}
 export const Submission: React.FC<Props> = ({ className }) => {
     const { challengeid, submissionid } = useParams();
     const { currentUser } = useApp();
@@ -20,9 +23,9 @@ export const Submission: React.FC<Props> = ({ className }) => {
         formData: state.formData,
         setFormData: state.setFormData
     }));
-    let htmlEditor = useRef(null);
-    let cssEditor = useRef(null);
-    let jsEditor = useRef(null);
+    let htmlEditor = useRef<MonacoEditor| null>(null);
+    let cssEditor = useRef<MonacoEditor| null>(null);
+    let jsEditor = useRef<MonacoEditor| null>(null);
     const [combineHTML, setCombineHTML] = useState<string | null>(null);
 
     useEffect(() => {
@@ -66,14 +69,15 @@ export const Submission: React.FC<Props> = ({ className }) => {
         `;
         return combinedHtml;
     }
+
     const updateHtmlContent = () => {
-        const html = htmlEditor.current?.getValue();
-        const css = cssEditor.current?.getValue();
-        const js = jsEditor.current?.getValue();
+        const html = htmlEditor.current!.getValue();
+        const css = cssEditor.current!.getValue();
+        const js = jsEditor.current!.getValue();
 
         setFormData({
             ...formData,
-            challenge_code: {
+            submission_code: {
                 html: htmlEditor.current?.getValue(),
                 css: cssEditor.current?.getValue(),
                 js: jsEditor.current?.getValue()
@@ -84,7 +88,7 @@ export const Submission: React.FC<Props> = ({ className }) => {
         setCombineHTML(combinedHtml);
     };
 
-    const handleEditorDidMount = (editor, type) => {
+    const handleEditorDidMount = (editor: MonacoEditor, type: string) => {
         if (type == 'HTML') htmlEditor.current = editor;
         if (type == 'CSS') cssEditor.current = editor;
         if (type == 'JS') jsEditor.current = editor;

@@ -8,9 +8,9 @@ interface FormData{
     },
     submission_draft?: boolean;
     submission_id?: string;
-    challenger_name: string;
-    challenges_id: string;
-    username: string;
+    challenger_name?: string;
+    challenges_id?: string;
+    username?: string;
 }
 
 interface SubmissionStore{
