@@ -8,7 +8,7 @@ interface Props {
 
 export const SubmissionPost: React.FC<Props> = ({ className, submissionsList }) => {
     const navigate = useNavigate();
-    
+    debugger;
     return (
         <section
             className={twMerge(`mt-10 slide-in flex `,
@@ -33,7 +33,7 @@ export const SubmissionPost: React.FC<Props> = ({ className, submissionsList }) 
                         <iframe src={`http://localhost:5173/preview/${submission.submission_id}`} className="w-full capture" />
                         </div>
                         <div className="p-3 space-y-1">
-                            <p className="uppercase font-semibold">{submission.challenger_name}</p>
+                            <p className="uppercase font-semibold">{submission.challenge_name}</p>
                             <p>by <Link className="text-lg capitalize hover:underline" to={`/profile/${submission.username}`}>{submission.fullname}</Link></p>
                         </div>
                     </div>

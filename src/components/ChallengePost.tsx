@@ -44,7 +44,7 @@ export const ChallengePost: React.FC<Props> = ({ className, challengesList, styl
                     btns-wrapper absolute bottom-0 left-0 w-full">
                         <button className="bg-purple-600 w-full py-2 rounded-bl-xl rounded-br-xl font-semibold">START</button>
                     </div>
-                    <div className="top-card bg-purple-900/60 rounded-tr-xl absolute top-0 right-0 px-5 py-2 gap-2 max-md:w-full flex items-center ">
+                    <div className="top-card bg-purple-900/60 rounded-tr-xl absolute top-0 right-0 px-5 py-2 gap-2 max-md:w-full justify-end flex items-center ">
                         <p className="uppercase font-semibold">{challenge.name}</p>
                         <StarRating rating={challenge.rating}></StarRating>
                     </div>

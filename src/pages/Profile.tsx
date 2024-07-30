@@ -81,14 +81,14 @@ export const Profile: React.FC<Props> = ({ className }) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const { error, data } = await getSubmissionsByUsername(id);
+            const { error, data } = await getSubmissionsByUsername(id!);
             if (error) {
                 return;
             }
             setSubmissions(data);
         }
 
-        if (currentUser) {
+        if (currentUser && id) {
             setupProfile(id);
             fetchData();
         }
@@ -150,16 +150,16 @@ export const Profile: React.FC<Props> = ({ className }) => {
                     data-state={formState}
                     className={`
                 ${formClass}
-
-                relative text-lg mx-auto flex 
+                min-h-[18rem]
+                relative text-lg mx-auto flex flex-col justify-center max-md:items-center md:flex-row
                 rounded-xl items-start max-w-[80%] bg-[#2C2446]
                 [&_label]:min-w-[7rem]
                 [&_.field>input]:flex-1
                 *:p-5
                 `}>
 
-                    <div className="w-[30%] flex flex-col justify-center items-center gap-10 ">
-                        <img src={"https://tailwindflex.com/public/images/" + profile?.avatar!} alt="Likes Dislikes Stats" className="w-[11rem] aspect-square rounded-full  object-cover object-top" />
+                    <div className="w-full md:w-[30%] flex flex-col justify-center items-center gap-10 ">
+                        <img src={profile?.avatar!} alt="Likes Dislikes Stats" className="w-[11rem] aspect-square rounded-full  object-cover object-top" />
                        
                     </div>
                     <div className="flex-1 form-wrapper">

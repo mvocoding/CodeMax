@@ -44,6 +44,7 @@ export const Signin: React.FC<Props> = ({ className }) => {
 
     return (
         <main className={twMerge(`
+            fade-in-up
             mt-5 gap-5
             max-w-[90%] flex mx-auto *:flex-1
             
