@@ -24,6 +24,7 @@ interface SupabaseContextProps {
     getSubmissionsByUsername: (username: string) => Promise<any>;
 
     getSubmissionDetail: (submissionID: number) => Promise<any>;
+    getUserProfileByID: (userID: string) => Promise<any>;
 }
 interface Props {
     children: ReactNode;
@@ -78,18 +79,14 @@ export const SupabaseProvider: React.FC<Props> = ({ children }) => {
             });
 
             if (!error) {
-                const { error: profileError, data: { roles, profiles } } = await supabase.from('user_roles').select(`
-                roles:role_id(name),
-                profiles:user_id(*)
-                `).eq('user_id', user?.id).single();
+                const { error: profileError, data: profileData } = await getUserProfileByID(user?.id!);
 
                 if (!profileError) {
                     return {
                         data: {
                             user: {
                                 ...user,
-                                rolename: roles.name,
-                                ...profiles
+                                profile: profileData,
                             },
                             session
                         },
@@ -127,6 +124,21 @@ export const SupabaseProvider: React.FC<Props> = ({ children }) => {
         try {
             const { error, data } = await supabase.rpc('get_profile', {
                 user_username: username
+            }).single();
+            return { error, data };
+        }
+        catch (error) {
+            return {
+                error: true,
+                data: null
+            };
+        }
+    }
+
+    const getUserProfileByID = async (userID: string): Promise<any> => {
+        try {
+            const { error, data } = await supabase.rpc('get_profile_by_userid', {
+                param_userid: userID
             }).single();
             return { error, data };
         }
@@ -364,7 +376,7 @@ export const SupabaseProvider: React.FC<Props> = ({ children }) => {
         <SupabaseContext.Provider value={{
             supabase, signup, signin, addNewPost, getChallenges, getUserSubmission, submitPost, checkUsernameAvailability,
             updateUserProfile, getUserProfile, getChallengeWithSubmission, getChallengeById, createOrUpdateSubmission, updateSubmission,
-            getSubmissionbyID, getSubmissionsByUsername, getSubmissionDetail
+            getSubmissionbyID, getSubmissionsByUsername, getSubmissionDetail, getUserProfileByID
         }}>
             {children}
         </SupabaseContext.Provider>

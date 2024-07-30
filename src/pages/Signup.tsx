@@ -4,8 +4,6 @@ import { twMerge } from "tailwind-merge";
 import { FormField } from "../components/FormField";
 import { useToast } from "../context/ToastContext";
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
-import { Testimonial } from "../layout/Testimonial";
 import { SignupForm, signUpSchema } from "../model";
 import { useSupabase } from "../context/SupabaseContext";
 import { useApp } from "../context/AppContext";
@@ -25,12 +23,8 @@ export const Signup: React.FC<Props> = ({ className }) => {
     const { signup } = useSupabase();
     const navigate = useNavigate()
 
-    useEffect(() => {
-        if(isSubmitting)
-            showToast('inprogress', 'Signing up. Please wait...');
-    }, [isSubmitting]);
-
     const onSubmit = async (formData: SignupForm) => {
+        showToast('inprogress', 'Signing up. Please wait...');
         const { error, data } = await signup(formData);
         if(!error){
             showToast('success', 'Signup successfully!');
@@ -46,7 +40,7 @@ export const Signup: React.FC<Props> = ({ className }) => {
         <main className={twMerge(`
             fade-in-up
             mt-5 gap-5
-            max-w-[90%] flex mx-auto *:flex-1
+            w-full md:max-w-[60%] flex items-start mx-auto *:flex-1
         `,
             className
         )}>
@@ -78,7 +72,7 @@ export const Signup: React.FC<Props> = ({ className }) => {
                     </Link>
                 </div>
             </section>
-            <Testimonial></Testimonial>
+            {/* <Testimonial></Testimonial> */}
         </main>
     )
 }

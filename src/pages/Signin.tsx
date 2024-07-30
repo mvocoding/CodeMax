@@ -1,4 +1,4 @@
-import { twMerge } from "tailwind-merge";
+import { twJoin, twMerge } from "tailwind-merge";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormField } from "../components/FormField";
@@ -19,34 +19,31 @@ export const Signin: React.FC<Props> = ({ className }) => {
         mode: 'onBlur',
         resolver: zodResolver(signInSchema)
     });
-    const { handleSubmit, formState: { isSubmitting }} = methods;
+    const { handleSubmit, formState: { isSubmitting } } = methods;
     const { showToast } = useToast();
     const { signin } = useSupabase();
-    const { setCurrentUser } = useApp();
+    const { setCurrentUser, setCurrentSession } = useApp();
     const navigate = useNavigate();
 
-    useEffect(() => {
-        if(isSubmitting)
-            showToast('inprogress', 'Signing in. Please wait...');
-    }, [isSubmitting])
-    
     const onSubmit = async (formdata: SigninForm) => {
+        showToast('inprogress', 'Signing in. Please wait...');
         const { error, data } = await signin(formdata);
 
-        if(!error){
+        if (!error) {
             showToast('success', 'Signin successfully!');
-            setCurrentUser(data);
-            navigate('/');
+            setCurrentUser(data.user);
+            setCurrentSession(data.session);
+            navigate('/', { replace: true });
         }
-        else 
-            showToast('error', 'Something went wrong!');
+        else
+            showToast('error', 'The Email or Password you entered is incorrect!');
     }
 
     return (
         <main className={twMerge(`
             fade-in-up
             mt-5 gap-5
-            max-w-[90%] flex mx-auto *:flex-1
+            w-full md:w-[80%] flex mx-auto *:flex-1
             
             [&_button]:uppercase
             [&_button]:py-2
@@ -71,10 +68,12 @@ export const Signin: React.FC<Props> = ({ className }) => {
                 </header>
                 <FormProvider {...methods}>
                     <form onSubmit={handleSubmit(onSubmit)} className="mt-5 space-y-5  pb-14">
-                        <FormField  id="email" name="email" type="email" label="" placeholder="Email Address"></FormField>
+                        <FormField id="email" name="email" type="email" label="" placeholder="Email Address"></FormField>
                         <FormField className="" id="password" name="password" type="password" label="" placeholder="Password"></FormField>
                         <div className="flex justify-center">
-                            <button type="submit" className="btn-primary " >
+                            <button type="submit" className={twJoin("btn-primary",
+                                isSubmitting && 'loading'
+                            )} >
                                 SIGN IN
                             </button>
                         </div>
@@ -82,7 +81,7 @@ export const Signin: React.FC<Props> = ({ className }) => {
                 </FormProvider>
 
                 <div className="">
-                    <Link to={'/signup'} className={twMerge("btn-dark", isSubmitting && 'loading')}>
+                    <Link to={'/signup'} className="btn-dark">
                         Create New Account
                     </Link>
                 </div>

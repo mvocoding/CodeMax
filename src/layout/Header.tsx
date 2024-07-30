@@ -33,10 +33,10 @@ const UserSignedIn: React.FC<{ currentUser: User }> = ({ currentUser }) => {
     return (
         <div className="flex justify-start items-center gap-3 ">
             <div className="capitalize text-center">
-                <p className="px-4 py-1 bg-yellow-400 text-purple-900 font-bold rounded-lg">{currentUser.profile.role}</p>
+                <p className="px-4 py-1 bg-yellow-400 text-purple-900 font-bold rounded-lg">{currentUser.profile!.role}</p>
             </div>
-            <Link className="size-12" to={`/profile/${currentUser.profile.username}`}>
-                <img className="w-full object-cover object-top border border-sky-800 rounded-full" src={'/images/thinking.svg'} alt="User Avatar" />
+            <Link className="size-12" to={`/profile/${currentUser.profile!.username}`}>
+                <img className="w-full object-cover object-top border border-sky-800 rounded-full" src={currentUser.profile?.avatar} alt="User Avatar" />
             </Link>
         </div>
     )
@@ -45,7 +45,6 @@ export const Header: React.FC<Props> = ({ className }) => {
     const { currentUser } = useApp();
     const { pathname } = useLocation();
     const navigate = useNavigate();
-
     const MENU: {
         text: string,
         className: string,
@@ -63,8 +62,8 @@ export const Header: React.FC<Props> = ({ className }) => {
         },
         {
             text: 'My Profile',
-            className: !currentUser?.profile.username ? 'hidden' : pathname.includes('/profile/') ? 'active' : '',
-            onClick: () => navigate(`/profile/${currentUser?.profile.username}`)
+            className: !currentUser?.profile!.username ? 'hidden' : pathname.includes('/profile/') ? 'active' : '',
+            onClick: () => navigate(`/profile/${currentUser?.profile!.username}`)
         }
     ]
     return (

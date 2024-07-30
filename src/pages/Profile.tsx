@@ -14,7 +14,7 @@ import { SubmissionPost } from "../components/SubmissionPost";
 interface Props {
     className?: string;
 }
-type FormStateKey = 'idle' | 'edit';
+type FormStateKey = 'owner' | 'viewer' | 'edit';
 interface FormStateProps {
     formClass: string;
     btns: ReactNode;
@@ -25,38 +25,46 @@ export const Profile: React.FC<Props> = ({ className }) => {
     const [profile, setProfile] = useState(null);
     const [submissions, setSubmissions] = useState<any[] | null>(null);
     const { checkUsernameAvailability, updateUserProfile, getUserProfile, getSubmissionsByUsername } = useSupabase();
-    const [formState, setFormState] = useState<FormStateKey>('idle');
+    const [formState, setFormState] = useState<FormStateKey>('viewer');
     const { showToast } = useToast();
     const { id } = useParams();
     const navigate = useNavigate();
     const formStateList: Record<FormStateKey, FormStateProps> = {
-        'idle': {
+        'owner': {
             formClass: `[&_.editable_.input]:bg-transparent
                  [&_.editable_.input]:border-0
                  [&_.editable_.input]:pointer-events-none
                   `,
-            btns: currentUser!.profile!.username === id ? (
+            btns: (
                 <>
                     <button className="btn-primary" type="button"
                         onClick={(e) => { e.preventDefault(); setFormState('edit') }}>Edit My Profile</button>
                     <button className="btn-primary" type="button"
-                        onClick={(e) => { e.preventDefault(); setFormState('edit') }}>Start Another Challenge</button>
+                        onClick={(e) => { navigate('/challenges')}}>Start Another Challenge</button>
                 </>
             )
-                : (
-                    <div></div>
-                )
+        },
+        'viewer': {
+            formClass: `[&_.editable_.input]:bg-transparent
+                 [&_.editable_.input]:border-0
+                 [&_.editable_.input]:pointer-events-none
+                  `,
+            btns: (
+                <>
+                </>
+            )
         },
         'edit': {
             formClass: '[&_.form-wrapper]:space-y-5',
             btns: (
                 <>
-            <button className="btn-primary" type="submit">Saves Change</button>
-            <button className="btn" type="button" onClick={() => setFormState('idle')}>Back</button>
-            </>
-        )
+                    <button className="btn-primary" type="submit">Saves Change</button>
+                    <button className="btn" type="button" onClick={() => setFormState('owner')}>Back</button>
+                </>
+            )
         }
     }
+
     const { formClass, btns } = formStateList[formState];
 
     const schema = z.object({
@@ -101,6 +109,7 @@ export const Profile: React.FC<Props> = ({ className }) => {
                 ...currentUser!.profile,
                 is_editable: true
             };
+            setFormState("owner");
         }
         else {
             const { error, data: profileData } = await getUserProfile(username);
@@ -129,7 +138,7 @@ export const Profile: React.FC<Props> = ({ className }) => {
                 ...currentUser,
                 profile: { ...profileData }
             });
-            navigate(profileData?.username, { replace: true });
+            navigate(`/profile/${profileData?.username}`, { replace: true });
             showToast('success', 'Update profile successfully!');
         }
         else {
@@ -162,23 +171,27 @@ export const Profile: React.FC<Props> = ({ className }) => {
                 rounded-xl items-start max-w-[80%] bg-[#2C2446]
                 [&_label]:min-w-[7rem]
                 [&_.field>input]:flex-1
-                *:p-5
+                *:p-5 md:*:p-10
                 `}>
 
-                    <div className="w-full md:w-[30%] flex flex-col justify-center items-center gap-10 ">
+                    <div className="w-full md:w-[30%] flex flex-col justify-center items-center gap-5 ">
                         <img src={profile?.avatar!} alt="Likes Dislikes Stats" className="w-[11rem] aspect-square rounded-full  object-cover object-top" />
-                        <button 
-                        onClick={handleSignout}
-                        className="btn-secondary">Sign out</button>
-                       
+
+                        {formState === "owner" && (
+                            <button type="button"
+                                onClick={handleSignout}
+                                className="btn-secondary">Sign out</button>
+                        )}
+
+
                     </div>
-                    <div className="flex-1 form-wrapper">
-                        <FormField
-                            className="editable "
-                            name="fullname" id="fullname" label="Full Name: " type="text" ></FormField>
+                    <div className="flex-1 form-wrapper max-md:w-full" >
                         <FormField
                             className="editable"
-                            name="username" id="username" label="Username: " type="text" ></FormField>
+                            name="fullname" id="fullname" label="" type="text" ></FormField>
+                        <FormField
+                            className="editable"
+                            name="username" id="username" label="" type="text" ></FormField>
                         <FormField
                             className="editable"
                             name="description" id="description" label="" row={2} inputType="textarea" type="text"></FormField>
@@ -190,7 +203,7 @@ export const Profile: React.FC<Props> = ({ className }) => {
             </FormProvider>
             <LazyLoading className="min-h-[400px]" text="Loading Submission..." isLoading={!submissions}>
                 <SubmissionPost submissionsList={submissions}
-                    className="mt-10 mx-auto max-w-[90%]"></SubmissionPost>
+                    className="p-10 mx-auto max-w-[100%]"></SubmissionPost>
             </LazyLoading>
         </section>)
 }

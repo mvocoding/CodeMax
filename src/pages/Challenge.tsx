@@ -102,7 +102,7 @@ export const Challenge: React.FC<Props> = ({ className }) => {
 
     return (
         <LazyLoading isLoading={!challenges} className="min-h-[400px]">
-            <section className={twMerge(`max-w-[90%] mx-auto mt-5`,
+            <section className={twMerge(`max-w-[100%] mx-auto p-10`,
                 className
             )}>
                 <FilterPanel currentFilter={filter} onChangeRating={setRating}></FilterPanel>

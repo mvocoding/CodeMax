@@ -33,7 +33,7 @@ function App() {
         <Route path="/signin" element={<ProtectedRoute isPublic element={<Signin />} />} />
         <Route path="/signup" element={<ProtectedRoute isPublic element={<Signup />} />} />
         <Route path="/profile/:id" element={<Profile />} />
-        <Route path="/admin" element={<Admin />} />
+        <Route path="/admin" element={<ProtectedRoute element={<Admin />} />} />
         <Route path="/preview/:submissionid" element={<PreviewFullScreen />} />
         <Route path="/notfound" element={<NotFound />} />
         <Route path="*" element={<NotFound />} />

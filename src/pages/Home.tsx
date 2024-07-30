@@ -13,7 +13,7 @@ export const Home: React.FC<Props> = ({ className }) => {
     const [challenges, setChallenges] = useState<any[] | null>(null);
     useEffect(() => {
         const getAllChallenges = async () => {
-            const { error, data } = await getChallenges();
+            const { error, data } = await getChallenges('', [], -1, 1, 12);
             if (!error) {
                 setChallenges(data);
             }
@@ -26,9 +26,7 @@ export const Home: React.FC<Props> = ({ className }) => {
             <Hero className="max-w-[80%] max-md:max-w-full"></Hero>
             <Banner className="max-w-[80%] flex mx-auto max-md:hidden"></Banner>
             <LazyLoading isLoading={!challenges}>
-                {/* <Filter></Filter> */}
-                {/* <CategorySelect className="mt-5"></CategorySelect> */}
-                <ChallengePost challengesList={challenges!} style="secondary" className="max-w-[90%] mt-5 mx-auto"></ChallengePost>
+                <ChallengePost challengesList={challenges!} style="secondary" className="max-w-[100%] p-10 mx-auto"></ChallengePost>
             </LazyLoading>
         </div>
 
