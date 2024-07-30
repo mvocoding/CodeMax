@@ -64,6 +64,11 @@ export const Header: React.FC<Props> = ({ className }) => {
             text: 'My Profile',
             className: !currentUser?.profile!.username ? 'hidden' : pathname.includes('/profile/') ? 'active' : '',
             onClick: () => navigate(`/profile/${currentUser?.profile!.username}`)
+        },
+        {
+            text: 'About Us',
+            className: '',
+            onClick: () => window.open('https://www.linkedin.com/company/codemax-australia/', '_blank')
         }
     ]
     return (
