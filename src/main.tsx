@@ -9,11 +9,11 @@ import { SupabaseProvider } from './context/SupabaseContext.tsx'
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
     <SupabaseProvider>
-      <AppProvider>
-        <ToastProvider>
+      <ToastProvider>
+        <AppProvider>
           <App />
-        </ToastProvider>
-      </AppProvider>
+        </AppProvider>
+      </ToastProvider>
     </SupabaseProvider>
   </BrowserRouter>
 )

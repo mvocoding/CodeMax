@@ -1,6 +1,8 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { SupabaseAuth, User } from "../model";
 import { useSupabase } from "./SupabaseContext";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "./ToastContext";
 
 interface AppContextProps {
     showLoader: (value: boolean) => void;
@@ -34,13 +36,21 @@ export const AppProvider: React.FC<Props> = ({ children }) => {
     const { supabase } = useSupabase();
     const [loaderVisible, setLoaderVisible] = useState<boolean>(false);
     const [currentUser, setCurrentUserState] = useState<User | null>(null);
+    const {showToast} = useToast();
 
     useEffect(() => {
         const savedUser = localStorage.getItem('supabase.auth.user');
         const savedSession = localStorage.getItem('supabase.auth.session');
         if (savedUser && savedSession) {
-            setCurrentUserState(JSON.parse(savedUser));
-            supabase.auth.setSession(JSON.parse(savedSession) as SupabaseAuth);
+            try{
+                setCurrentUserState(JSON.parse(savedUser));
+                supabase.auth.setSession(JSON.parse(savedSession) as SupabaseAuth);
+            }
+            catch(exception){
+                setCurrentUser(null);
+                setCurrentSession(null);
+                showToast("error", 'Your session has expired. Please log in again!');
+            }
         }
         else {
             setCurrentUserState({
