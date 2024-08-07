@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { twMerge } from "tailwind-merge";
+import { twJoin, twMerge } from "tailwind-merge";
 import { TabItem } from "../model";
 
 
@@ -24,8 +24,8 @@ interface TabContentProps {
 const TabContent: React.FC<TabContentProps> = ({ className, content, isActive }) => {
     return (
         <div 
-            className={twMerge('relative w-full transition-all duration-300 leading-6 text-sm h-full',
-                isActive ? ' left-0 visible' : ' left-[1000px] invisible ',
+            className={twMerge(' relative w-full transition-all duration-200 leading-6 text-sm h-full',
+                isActive ? ' left-0 visible' : ' left-[10000px] invisible ',
                 className
             )}>{content}</div>
     )
@@ -35,12 +35,13 @@ interface Props {
     tabsList: TabItem[];
     className?: string;
     orientation?: 'vertical' | 'horizontal';
+    scroll?: 'scroll' | 'no';
 }
-export const Tab: React.FC<Props> = ({ tabsList, className, orientation = 'horizontal' }) => {
+export const Tab: React.FC<Props> = ({ tabsList, className, orientation = 'horizontal', scroll = 'scroll'}) => {
     const [activeTab, setActiveTab] = useState(0);
 
     return (
-        <div className={twMerge(`grid ${orientation == 'horizontal' ? ' grid-rows-[auto_1fr] ' : ' grid-cols-[150px_1fr]'} `,
+        <div className={twMerge(`h-full grid ${orientation == 'horizontal' ? ' grid-rows-[auto_1fr] ' : ' grid-cols-[150px_1fr]'} `,
             className
         )}>
             <div className={`grid ${ orientation == 'horizontal' ? ' [grid-template-columns:repeat(auto-fit,minmax(150px,1fr))] [grid-auto-rows:1fr] '
@@ -52,8 +53,10 @@ export const Tab: React.FC<Props> = ({ tabsList, className, orientation = 'horiz
                     <TabButton key={index} title={tab.title} isActive={index == activeTab} onClick={() => setActiveTab(index)}></TabButton>
                 ))}
             </div>
-            <div className={`bg-black/40 ring-8 ring-black/5 border border-zinc-700/30 
-            relative grid [grid-template-areas:'stack'] min-h-screen overflow-scroll `}>
+            <div className={twJoin(`bg-black/40 ring-8 ring-black/5 border  border-zinc-700/30 
+            relative grid [grid-template-areas:'stack']`,
+                scroll === 'scroll' && 'overflow-scroll'
+            )}>
                 {tabsList.map((tab, index) => (
                     <TabContent 
                     className="[grid-area:stack]"

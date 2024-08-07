@@ -40,7 +40,7 @@ export const Signup: React.FC<Props> = ({ className }) => {
         <main className={twMerge(`
             fade-in-up
             mt-5 gap-5
-            w-full md:max-w-[60%] flex items-start mx-auto *:flex-1
+            w-full md:max-w-[50%] flex items-start mx-auto *:flex-1
         `,
             className
         )}>

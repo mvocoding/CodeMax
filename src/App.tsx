@@ -13,6 +13,7 @@ import { Submission } from './pages/Submission'
 import { NotFound } from './pages/NotFound'
 import { PreviewFullScreen } from './pages/PreviewFullScreen'
 import { ProtectedRoute } from './components/ProtectedRoute'
+import { Learn } from './pages/Learn'
 
 function App() {
   const { pathname } = useLocation();
@@ -26,6 +27,7 @@ function App() {
       {isSubmissionPage ? <SubmissionHeader className='fade-in-down' /> : isPreviewPage ? undefined : <Header className='fade-in-down' />}
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/codingchallenges" element={<Learn />} />
         <Route path="/challenges" element={<Challenge />} />
         <Route path="/challenges/:id/submissions" element={<ChallengeDetail />} />
         <Route path="/challenges/:id/newsubmission" element={<NewSubmission />} />
