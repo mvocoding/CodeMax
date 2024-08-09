@@ -25,7 +25,7 @@ export const ChallengePost: React.FC<Props> = ({ className, challengesList, styl
                 hover:*:bg-[#2C2446]
                 hover:*:shadow-xl
                 hover:*:scale-105
-                [&_.capture]:object-cover
+                [&_.capture]:object-contain
                 [&_.capture]:h-[22rem]
                 *:bg-[#2C2446]/50
 

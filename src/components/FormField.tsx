@@ -1,30 +1,56 @@
 import { useFormContext } from "react-hook-form";
 import { twMerge } from "tailwind-merge";
 
+interface SelectOption {
+    text: string;
+    value: string;
+}
+
 interface Props {
     inputType?: string;
     className?: string;
     id: string;
     name: string;
-    type: string;
+    type?: string;
     placeholder?: string;
     label?: string;
     defaultValue?: string;
     row?: number;
+    data?: SelectOption[];
 }
 
 export const FormField: React.FC<Props> = ({
-    inputType = 'input',
+    inputType = 'text',
     className,
     id,
     name,
-    type,
+    type = 'text',
     placeholder = '',
     label = '',
     defaultValue = '',
+    data = [],
     row = 1
 }) => {
     const { register, formState: { errors } } = useFormContext();
+
+    const template = {
+        'textarea': (
+            <textarea {...register(name)} id={id} className="input" placeholder={placeholder} defaultValue={defaultValue} rows={row} />
+        ),
+
+        'text': (
+            <input id={id} type={type} className="input peer" placeholder={placeholder} defaultValue={defaultValue}
+                {...register(name)} />
+        ),
+
+        'select': (
+            <select className="input" {...register(name)} id={id} defaultValue={defaultValue}>
+                {data.map((item, index) => (
+                    <option key={index} value={item.value}>{item.text}</option>
+                ))}
+            </select>
+        )
+    }
     return (
         <div data-state={errors[name] ? 'error' : 'valid'} className={twMerge(className, `field 
             [&_label]:font-semibold
@@ -50,13 +76,7 @@ export const FormField: React.FC<Props> = ({
         )}>
             <div className="field-input">
                 {label && (<label>{label}</label>)}
-                {inputType == 'textarea' ? (
-                    <textarea {...register(name)} id={id} className="input" placeholder={placeholder} defaultValue={defaultValue} rows={row} />
-                ) : (
-                    <input id={id} type={type} className="input peer" placeholder={placeholder} defaultValue={defaultValue}
-                        {...register(name)} />
-                )}
-
+                {template[inputType]}
             </div>
             {errors[name] && (<p className="field-message mt-4 p-2 rounded-lg">{(errors[name] as { message: string })?.message}</p>)}
         </div>

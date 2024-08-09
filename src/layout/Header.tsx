@@ -57,13 +57,13 @@ export const Header: React.FC<Props> = ({ className }) => {
         },
         {
             text: 'Front-End Challenges',
-            className: pathname == '/challenges' ? 'active': '',
-            onClick: () => navigate('/challenges')
+            className: pathname == '/challenges/frontend' ? 'active': '',
+            onClick: () => navigate('/challenges/frontend')
         },
         {
             text: 'Data Structure & Algorithm',
-            className: pathname == '/algorithm' ? 'active': '',
-            onClick: () => navigate('/algorithm')
+            className: pathname == '/challenges/algorithm' ? 'active': '',
+            onClick: () => navigate('/challenges/algorithm')
         },
         {
             text: 'My Profile',

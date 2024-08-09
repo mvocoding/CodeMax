@@ -1,13 +1,10 @@
-import { Editor } from "@monaco-editor/react";
-import Tab from "../components/Tab";
 import { useSupabase } from "../context/SupabaseContext";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState} from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useApp } from "../context/AppContext";
-import HtmlIframe from "../components/HtmlIframe";
-import { useSubmissionStore } from "../store/useSubmissionStore";
 import { LazyLoading } from "../components/LazyLoading";
-import { MonacoEditor } from "../model";
+import { FrontEndSubmission } from "../components/FrontEndSubmission";
+import { AlgorithmSubmission } from "../components/AlgorithmSubmission";
 
 interface Props {
     className?: string;
@@ -17,15 +14,8 @@ export const Submission: React.FC<Props> = ({ className }) => {
     const { challengeid, submissionid } = useParams();
     const { currentUser } = useApp();
     const { getSubmissionDetail } = useSupabase();
+    const [submission, setSubmission] = useState(null);
     const navigate = useNavigate();
-    const { formData, setFormData } = useSubmissionStore(state => ({
-        formData: state.formData,
-        setFormData: state.setFormData
-    }));
-    let htmlEditor = useRef<MonacoEditor| null>(null);
-    let cssEditor = useRef<MonacoEditor| null>(null);
-    let jsEditor = useRef<MonacoEditor| null>(null);
-    const [combineHTML, setCombineHTML] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -37,91 +27,15 @@ export const Submission: React.FC<Props> = ({ className }) => {
                 navigate('/notfound', { replace: true });
                 return;
             }
-            setFormData(data);
-            setCombineHTML(createHTML(data.submission_code.html, data.submission_code.css, data.submission_code.js));
+            setSubmission(data);
         };
 
         fetchData();
-    }, [currentUser, challengeid, getSubmissionDetail, navigate, setFormData]);
-
-    const createHTML = (html: string, css: string, js: string) => {
-        const combinedHtml = `
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <style>${css}</style>
-            </head>
-            <body>
-                ${html}
-                <script>${js}</script>
-            </body>
-            </html>
-        `;
-        return combinedHtml;
-    }
-
-    const updateHtmlContent = () => {
-        const html = htmlEditor.current!.getValue();
-        const css = cssEditor.current!.getValue();
-        const js = jsEditor.current!.getValue();
-
-        setFormData({
-            ...formData,
-            submission_code: {
-                html: htmlEditor.current?.getValue(),
-                css: cssEditor.current?.getValue(),
-                js: jsEditor.current?.getValue()
-            }
-        });
-
-        const combinedHtml = createHTML(html, css, js);
-        setCombineHTML(combinedHtml);
-    };
-
-    const handleEditorDidMount = (editor: MonacoEditor, type: string) => {
-        if (type == 'HTML') htmlEditor.current = editor;
-        if (type == 'CSS') cssEditor.current = editor;
-        if (type == 'JS') jsEditor.current = editor;
-    }
+    }, [currentUser, challengeid, getSubmissionDetail, navigate]);
 
     return (
-        <LazyLoading isLoading={!formData || !combineHTML} text="Loading Submission...">
-            <div className="h-screen flex fade-in-up *:flex-1">
-                <Tab tabsList={[
-                    {
-                        title: 'Challenge',
-                        content: (<img src={formData?.challenge_thumbnail} alt="Challenge Thumbnail"/>)
-                    },
-
-                    {
-                        title: 'HTML',
-                        content: (<Editor
-                            onChange={updateHtmlContent}
-                            onMount={(editor) => handleEditorDidMount(editor, 'HTML')}
-                            theme='vs-dark' defaultLanguage="html" defaultValue={formData?.submission_code?.html} />)
-                    },
-                    {
-                        title: 'CSS',
-                        content: (<Editor
-                            onChange={updateHtmlContent}
-                            onMount={(editor) => handleEditorDidMount(editor, 'CSS')}
-                            theme='vs-dark' defaultLanguage="css" defaultValue={formData?.submission_code?.css} />)
-                    },
-                    {
-                        title: 'JS',
-                        content: (<Editor
-                            onChange={updateHtmlContent}
-                            onMount={(editor) => handleEditorDidMount(editor, 'JS')}
-                            theme='vs-dark' defaultLanguage="javascript" defaultValue={formData?.submission_code?.js} />)
-                    },
-                    {
-                        title: 'Preview',
-                        content: (
-                            <HtmlIframe className="min-h-screen min-w-full" height="100%" width="100%" src={combineHTML!} />
-                        )
-                    },
-                ]}></Tab>
-            </div>
+        <LazyLoading isLoading={!submission} text="Loading Submission...">
+            <AlgorithmSubmission data={submission}></AlgorithmSubmission>
         </LazyLoading>
     )
 }

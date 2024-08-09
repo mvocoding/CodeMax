@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useContext } from "react";
-import { NewChallengeForm, SigninForm, SignupForm } from "../model";
+import { FilterChallengeParams, NewChallengeForm, SigninForm, SignupForm } from "../model";
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseKey = import.meta.env.VITE_SUPABASE_KEY;
@@ -8,10 +8,8 @@ interface SupabaseContextProps {
     supabase: SupabaseClient;
     signup: (formData: SignupForm) => Promise<SupabaseResponse>;
     signin: (formData: SigninForm) => Promise<SupabaseResponse>;
-    addNewPost: (newPost: NewChallengeForm) => Promise<boolean>;
-    getChallenges: (name: string, tag: string[], rating: number, pagenumber: number, pagesize: number) => Promise<any>;
+    getChallenges: (params: FilterChallengeParams) => Promise<any>;
     getUserSubmission: (userID: string) => Promise<any>;
-    submitPost: (userID: string, postID: string, code: Record<string, string>) => Promise<any>;
     checkUsernameAvailability: (username: string) => Promise<boolean>;
     updateUserProfile: (userid: string, username: string, fullname: string, description: string, avatar: string) => Promise<any>;
 
@@ -30,7 +28,8 @@ interface SupabaseContextProps {
         param_rating: string,
         param_name: string,
         param_description: string,
-        param_code: any) => Promise<any>;
+        param_code: any,
+        param_langs: string[]) => Promise<any>;
 }
 interface Props {
     children: ReactNode;
@@ -210,43 +209,6 @@ export const SupabaseProvider: React.FC<Props> = ({ children }) => {
         }
     }
 
-    const addNewPost = async (newPost: NewChallengeForm): Promise<boolean> => {
-        try {
-            const { error: challengeError } = await supabase.from('challenges').insert({
-                created_by: newPost.user_id,
-                name: newPost.name,
-                description: newPost.description,
-                thumbnail: 'forgot-password-form/thumb_u.min.webp',
-                code: newPost.code
-            });
-            return false;
-        }
-        catch (error) {
-            return true;
-        }
-    }
-
-
-    const submitPost = async (userID: string, postID: string, code: Record<string, string>): Promise<any> => {
-        try {
-            const { error } = await supabase
-                .from('submissions')
-                .upsert({
-                    user_id: userID,
-                    challenge_id: postID,
-                    code
-                }, { onConflict: ['user_id', 'challenge_id'] });
-
-            return { error };
-        }
-        catch (error) {
-            return {
-                error: true,
-                data: null
-            }
-        }
-    }
-
     const getSubmissionDetail = async (submissionID: number): Promise<any> => {
         try {
             const { data, error } = await supabase.rpc('get_submissions_by_submissionid', { param_submissionid: submissionID }).single();
@@ -256,14 +218,10 @@ export const SupabaseProvider: React.FC<Props> = ({ children }) => {
         }
     };
 
-    const getChallenges = async (name: string, tag: string[], rating: number, pagenumber: number, pagesize: number): Promise<any> => {
+    const getChallenges = async (params: FilterChallengeParams): Promise<any> => {
         try {
             const { error, data } = await supabase.rpc('filter_challenges', {
-                filter_name: name,
-                filter_tag: tag,
-                filter_rating: rating,
-                page_number: pagenumber,
-                page_size: pagesize
+                ...params
             });
             return {
                 error,
@@ -383,7 +341,8 @@ export const SupabaseProvider: React.FC<Props> = ({ children }) => {
         param_rating: string,
         param_name: string,
         param_description: string,
-        param_code: any): Promise<any> => {
+        param_code: any,
+        param_langs: string[]): Promise<any> => {
         try {
             const { error, data } = await supabase.rpc('create_challenge', {
                 param_userid: param_userid,
@@ -392,6 +351,7 @@ export const SupabaseProvider: React.FC<Props> = ({ children }) => {
                 param_name: param_name,
                 param_description: param_description,
                 param_code: param_code,
+                param_langs: param_langs
             }).single();
             return {
                 error,
@@ -408,7 +368,7 @@ export const SupabaseProvider: React.FC<Props> = ({ children }) => {
 
     return (
         <SupabaseContext.Provider value={{
-            supabase, signup, signin, addNewPost, getChallenges, getUserSubmission, submitPost, checkUsernameAvailability,
+            supabase, signup, signin, getChallenges, getUserSubmission, checkUsernameAvailability,
             updateUserProfile, getUserProfile, getChallengeWithSubmission, getChallengeById, createOrUpdateSubmission, updateSubmission,
             getSubmissionbyID, getSubmissionsByUsername, getSubmissionDetail, getUserProfileByID, createChallenge
         }}>

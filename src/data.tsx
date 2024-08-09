@@ -1,3 +1,4 @@
+
 export const DEFAULT_CHALLENGE_DESCRIPTION = `Start with this design and transform it into a functional project using HTML, CSS, and JavaScript.
 
 If you want to go the extra mile, expand upon it, and integrate your unique touch by adding animations and interactivity.
@@ -46,5 +47,63 @@ export const DEFAULT_CHALLENGE_HTML = `<html>
 <!-- Change code above this line -->
 
 </html>`;
+
+
+
+
+export const DEFAULT_CHALLENGE_PYTHON = `# Don't change the function name & params
+# Extract the params first and then calculate as you want
+
+def question(*args):
+    return args
+`;
+    
+export const DEFAULT_CHALLENGE_CSHARP = `
+// Don't change the function name & params
+// Extract the params first and then calculate as you want
+
+using System;
+using System.Collections.Generic;
+
+public class Program
+{
+    public static void Question(Dictionary<string, object> paramsDict)
+    {
+        // Extract parameters and perform calculations as needed
+        Console.WriteLine(paramsDict);
+    }
+
+    public static void Main()
+    {
+        // Example usage
+        var exampleParams = new Dictionary<string, object>
+        {
+            { "param1", 42 },
+            { "param2", "Hello, world!" }
+        };
+
+        Question(exampleParams);
+    }
+}
+`;
+export const DEFAULT_CHALLENGE_JAVASCRIPT = `
+// Don't change the function name & params
+// Extract the params first and then calculate as you want
+
+function question(...params) {
+    return params;
+}`;
+export const DEFAULT_CHALLENGE_JAVA = `
+// Don't change the function name & params
+// Extract the params first and then calculate as you want
+
+import java.util.Map;
+
+public class Main {
+    public static void question(Map<String, Object> params) {
+        // Extract parameters and perform calculations as needed
+        System.out.println(params);
+    }
+}`;
 
 

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useSupabase } from "../context/SupabaseContext";
 import { LazyLoading } from "../components/LazyLoading";
 import { StarRating } from "../components/StarRating";
+import { useParams } from "react-router-dom";
 
 interface Props {
     className?: string;
@@ -73,6 +74,7 @@ const FilterPanel: React.FC<FilterProps> = ({ className, onChangeRating, current
 export const Challenge: React.FC<Props> = ({ className }) => {
     const { getChallenges } = useSupabase();
     const [challenges, setChallenges] = useState<any[] | null>([]);
+    const { type } = useParams();
     const [filter, setFilter] = useState<Filter>({
         name: '',
         tags: [],
@@ -83,14 +85,23 @@ export const Challenge: React.FC<Props> = ({ className }) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const { error, data } = await getChallenges(filter.name, filter.tags, filter.rating, filter.currentPage, filter.pageSize);
+            const { error, data } = await getChallenges(
+                {
+                    filter_name: filter.name,
+                    filter_tag: filter.tags,
+                    filter_rating: filter.rating,
+                    filter_lang: [type!],
+                    page_number: filter.currentPage,
+                    page_size: filter.pageSize
+                });
             if (error) {
                 return;
             }
             setChallenges(data);
         }
-        fetchData();
-    }, [filter]);
+        if(filter && type)
+            fetchData();
+    }, [filter, type]);
 
     const setRating = (rating: number) => {
         setChallenges(null);

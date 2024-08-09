@@ -5,14 +5,19 @@ import { useSubmissionStore } from "../store/useSubmissionStore";
 import { useSupabase } from "../context/SupabaseContext";
 import { useToast } from "../context/ToastContext";
 import { useEffect, useState } from "react";
+import { getTestResult } from "../util/emkc";
 
 interface Props {
     className?: string;
 }
 type MenuOption = 'GUESS' | 'OWNER';
 
+
 export const SubmissionHeader: React.FC<Props> = ({ className }) => {
-    const { formData } = useSubmissionStore();
+    const { formData, setPreviewHTML } = useSubmissionStore(state => ({
+        formData: state.formData,
+        setPreviewHTML: state.setPreviewHTML,
+    }));
     const { updateSubmission } = useSupabase();
     const { currentUser } = useApp();
     const { showToast } = useToast();
@@ -49,6 +54,42 @@ export const SubmissionHeader: React.FC<Props> = ({ className }) => {
             return;
         }
     }
+    const handleRunClick = async () => {
+        const { testcase, currentLanguage } = formData!.submission_code!;
+        let code = formData?.submission_code[currentLanguage];
+
+        const testResp = await getTestResult(code, testcase!, currentLanguage!);
+        let testcaseHTML = undefined;
+        try {
+            const testcaseResult = JSON.parse(testResp);
+            testcaseHTML = testcaseResult.map((test: any, index: number) => (
+                `
+            <div>
+                <p style="font-weight:bold">Test Case ${index + 1}: ${test.testResult}</p>
+                <p>Params: </p>
+                <p style="color:black; background-color:#d1d5db; padding:0.5rem">${test.params}</p>
+                <p>Target: </p>
+                <p style="color:black;  background-color:#d1d5db; padding:0.5rem">${test.result}</p>
+                <p>Your Result: </p>
+                <p style="color:black;  background-color:#d1d5db; padding:0.5rem">${test.funcResult}</p>
+            </div>
+            `
+            )).join('');
+
+            showToast("success", `Code run successfully. Check the result !`);
+        }
+        catch (exception) {
+            testcaseHTML = `Code Error. Please check again !`;
+            showToast("error", `Code Error. Please check again !`);
+        }
+
+        const previewHTML = `
+        <div style="color: #d1d5db; width:50%; display:flex;flex-direction:column;justify-item:center; padding:1rem;">
+            ${testcaseHTML}
+        </div>`;
+
+        setPreviewHTML(previewHTML);
+    }
 
 
     const MENULIST: Record<MenuOption, {
@@ -62,8 +103,8 @@ export const SubmissionHeader: React.FC<Props> = ({ className }) => {
                 onClick: () => navigate(`/challenges/${formData?.challenges_id}/submissions`),
             },
             {
-                text: 'Preview',
-                onClick: () => window.open(`/preview/${formData?.submission_id}`, '_blank'),
+                text: 'Run',
+                onClick: () => handleRunClick(),
             },
             {
                 text: 'Save',
@@ -104,7 +145,7 @@ export const SubmissionHeader: React.FC<Props> = ({ className }) => {
             <div className=" flex items-center justify-between">
                 <div className="max-sm:hidden">
                     <Link to={'/'} className="block w-16">
-                        <img src="/images/logo.png" alt="Logo"/>
+                        <img src="/images/logo.png" alt="Logo" />
                     </Link>
                 </div>
                 <div className="max-md:hidden">

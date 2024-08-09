@@ -61,3 +61,13 @@ export type SigninForm = z.infer<typeof signInSchema>;
 export interface MonacoEditor{
     getValue: () => string;
 }
+
+
+export interface FilterChallengeParams{
+    filter_name: string;
+    filter_tag: string[];
+    filter_rating: number;
+    filter_lang: string[];
+    page_number: number,
+    page_size: number;
+}
