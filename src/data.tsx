@@ -86,6 +86,7 @@ public class Program
     }
 }
 `;
+
 export const DEFAULT_CHALLENGE_JAVASCRIPT = `
 // Don't change the function name & params
 // Extract the params first and then calculate as you want
@@ -93,6 +94,7 @@ export const DEFAULT_CHALLENGE_JAVASCRIPT = `
 function question(...params) {
     return params;
 }`;
+
 export const DEFAULT_CHALLENGE_JAVA = `
 // Don't change the function name & params
 // Extract the params first and then calculate as you want

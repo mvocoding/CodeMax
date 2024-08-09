@@ -8,6 +8,7 @@ interface SubmissionCode {
     currentLanguage?: string; // Add this if it's part of your data
     python?: string;
     javascript?: string;
+    preview?: string;
 }
 
 interface FormData{
@@ -18,7 +19,6 @@ interface FormData{
     challenges_id?: string;
     username?: string;
     challenge_thumbnail?: string;
-    preview?: string;
 }
 
 interface SubmissionStore{
@@ -34,7 +34,10 @@ export const useSubmissionStore = create<SubmissionStore>((set, get) => ({
     setPreviewHTML: (preview: string) => set((state) => ({
         formData: {
             ...state.formData, 
-            preview: preview  
+            submission_code: {
+                ...state.formData!.submission_code,
+                preview
+            }
         }
     })),
     setUserCode: (usercode: string) => set((state) => ({

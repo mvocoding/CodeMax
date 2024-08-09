@@ -93,7 +93,7 @@ export const AlgorithmSubmission: React.FC<Props> = ({ className, data }) => {
                 {
                     title: 'Preview',
                     content: (
-                        <HtmlIframe className="min-h-screen min-w-full" height="100%" width="100%" src={formData?.preview!} />
+                        <HtmlIframe className="min-h-screen min-w-full" height="100%" width="100%" src={formData?.submission_code.preview!} />
                     )
                 }
             ]}></Tab>
