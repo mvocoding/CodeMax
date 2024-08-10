@@ -3,7 +3,7 @@ import { twMerge } from "tailwind-merge";
 
 interface SelectOption {
     text: string;
-    value: string;
+    value: any;
 }
 
 interface Props {
@@ -29,13 +29,14 @@ export const FormField: React.FC<Props> = ({
     label = '',
     defaultValue = '',
     data = [],
-    row = 1
+    row = 1,
 }) => {
     const { register, formState: { errors } } = useFormContext();
 
     const template = {
         'textarea': (
-            <textarea {...register(name)} id={id} className="input" placeholder={placeholder} defaultValue={defaultValue} rows={row} />
+            <textarea {...register(name)}
+             id={id} className="input" placeholder={placeholder} defaultValue={defaultValue} rows={row} />
         ),
 
         'text': (
@@ -44,7 +45,7 @@ export const FormField: React.FC<Props> = ({
         ),
 
         'select': (
-            <select className="input" {...register(name)} id={id} defaultValue={defaultValue}>
+            <select className="input" {...register(name)}  id={id} defaultValue={defaultValue}>
                 {data.map((item, index) => (
                     <option key={index} value={item.value}>{item.text}</option>
                 ))}

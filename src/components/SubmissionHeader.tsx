@@ -6,6 +6,7 @@ import { useSupabase } from "../context/SupabaseContext";
 import { useToast } from "../context/ToastContext";
 import { useEffect, useState } from "react";
 import { getTestResult } from "../util/emkc";
+import { createHTML } from "../util/util";
 
 interface Props {
     className?: string;
@@ -55,6 +56,15 @@ export const SubmissionHeader: React.FC<Props> = ({ className }) => {
         }
     }
     const handleRunClick = async () => {
+        if(formData!.challenge_lang[0] == 'frontend'){
+            const previewHTML = createHTML(formData!.submission_code?.html!, formData!.submission_code?.css!, 
+                formData!.submission_code?.js!
+            );
+            setPreviewHTML(previewHTML);
+            showToast("success", `Code run successfully. Check the result !`);
+            return;
+        }
+
         const { testcase, currentLanguage } = formData!.submission_code!;
         let code = formData?.submission_code[currentLanguage];
 
@@ -67,11 +77,11 @@ export const SubmissionHeader: React.FC<Props> = ({ className }) => {
             <div>
                 <p style="font-weight:bold">Test Case ${index + 1}: ${test.testResult}</p>
                 <p>Params: </p>
-                <p style="color:black; background-color:#d1d5db; padding:0.5rem">${test.params}</p>
+                <p style="color:black; background-color:#d1d5db; padding:0.5rem">${JSON.stringify(test.params)}</p>
                 <p>Target: </p>
-                <p style="color:black;  background-color:#d1d5db; padding:0.5rem">${test.result}</p>
+                <p style="color:black;  background-color:#d1d5db; padding:0.5rem">${JSON.stringify(test.result)}</p>
                 <p>Your Result: </p>
-                <p style="color:black;  background-color:#d1d5db; padding:0.5rem">${test.funcResult}</p>
+                <p style="color:black;  background-color:#d1d5db; padding:0.5rem">${JSON.stringify(test.funcResult)}</p>
             </div>
             `
             )).join('');
@@ -93,36 +103,72 @@ export const SubmissionHeader: React.FC<Props> = ({ className }) => {
 
 
     const MENULIST: Record<MenuOption, {
-        text: string;
+        children: React.ReactNode;
         onClick: () => void;
         className?: string;
     }[]> = {
         'OWNER': [
             {
-                text: 'Back',
+                children: (
+                    <>
+                        <span className="material-symbols-outlined">
+                            arrow_back
+                        </span> Back
+                    </>
+                ),
                 onClick: () => navigate(`/challenges/${formData?.challenges_id}/submissions`),
             },
             {
-                text: 'Run',
+                children: (
+                    <>
+                        <span className="material-symbols-outlined">
+                            play_arrow
+                        </span> Run
+                    </>
+                ),
                 onClick: () => handleRunClick(),
             },
             {
-                text: 'Save',
+                children: (
+                    <>
+                        <span className="material-symbols-outlined">
+                            save
+                        </span> Save
+                    </>
+                ),
                 onClick: () => handleSaveClick(),
             },
             {
-                text: 'Submit',
+                children: (
+                    <>
+                        <span className="material-symbols-outlined">
+                            play_arrow
+                        </span> Submit
+                    </>
+                ),
                 onClick: () => handleSubmitClick(),
                 className: 'active'
             }
         ],
         'GUESS': [
             {
-                text: 'View Submissions',
+                children: (
+                    <>
+                        <span className="material-symbols-outlined">
+                            view_list
+                        </span> View Submission
+                    </>
+                ),
                 onClick: () => navigate(`/challenges/${formData?.challenges_id}/submissions`),
             },
             {
-                text: 'Try This',
+                children: (
+                    <>
+                        <span className="material-symbols-outlined">
+                            code
+                        </span> Try This
+                    </>
+                ),
                 onClick: () => handleTryChallengeClick(),
                 className: 'active'
             },
@@ -174,10 +220,12 @@ export const SubmissionHeader: React.FC<Props> = ({ className }) => {
                         before:[&_li]:-z-10
                         before:[&_li]:rounded-full
                         hover:before:[&_li]:inset-0
+                        *:flex *:items-center *:gap-1
+    [&_span]:text-emerald-400
                     ">
                     {MENULIST[menu].map((option, index) => (
                         <li key={index} className={option.className}
-                            onClick={option.onClick}>{option.text}</li>
+                            onClick={option.onClick}>{option.children}</li>
                     ))}
                 </ul>
             </div>

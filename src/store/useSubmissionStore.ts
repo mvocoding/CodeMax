@@ -25,7 +25,7 @@ interface SubmissionStore{
     formData: FormData | null;
     setFormData: (data: FormData) => void;
     setPreviewHTML: (preview: string) => void;
-    setUserCode: (preview: string) => void;
+    setUserCode: (usercode: string, language: string) => void;
 }
 
 export const useSubmissionStore = create<SubmissionStore>((set, get) => ({
@@ -40,12 +40,13 @@ export const useSubmissionStore = create<SubmissionStore>((set, get) => ({
             }
         }
     })),
-    setUserCode: (usercode: string) => set((state) => ({
+    setUserCode: (usercode: string, language: string) => set((state) => ({
         formData: {
             ...state.formData, 
             submission_code: {
                 ...state.formData!.submission_code,
-                [state.formData!.submission_code!.currentLanguage!]: usercode
+                [language]: usercode,
+                currentLanguage: language
             }
         }
     }))

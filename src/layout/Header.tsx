@@ -2,6 +2,8 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
 import { useApp } from "../context/AppContext";
 import { User } from "../model";
+import { IoIosLogOut } from "react-icons/io";
+import { useToast } from "../context/ToastContext";
 
 interface Props {
     className?: string;
@@ -29,7 +31,7 @@ const Guess = () => {
     )
 }
 
-const UserSignedIn: React.FC<{ currentUser: User }> = ({ currentUser }) => {
+const UserSignedIn: React.FC<{ currentUser: User, handleSignout: () => void }> = ({ currentUser, handleSignout }) => {
     return (
         <div className="flex justify-start items-center gap-3 ">
             <div className="capitalize text-center">
@@ -38,50 +40,57 @@ const UserSignedIn: React.FC<{ currentUser: User }> = ({ currentUser }) => {
             <Link className="size-12" to={`/profile/${currentUser.profile!.username}`}>
                 <img className="w-full object-cover object-top border border-sky-800 rounded-full" src={currentUser.profile?.avatar} alt="User Avatar" />
             </Link>
+            <button className="btn-icon text-xl" onClick={handleSignout} type="button">
+                <IoIosLogOut />
+            </button>
         </div>
     )
 }
 export const Header: React.FC<Props> = ({ className }) => {
-    const { currentUser } = useApp();
+    const { currentUser, signout } = useApp();
     const { pathname } = useLocation();
     const navigate = useNavigate();
+    const { showToast } = useToast();
     const MENU: {
         text: string,
         className: string,
         onClick: () => void
     }[] = [
-        {
-            text: 'Home',
-            className: pathname == '/' ? 'active': '',
-            onClick: () => navigate('/')
-        },
-        {
-            text: 'Front-End Challenges',
-            className: pathname == '/challenges/frontend' ? 'active': '',
-            onClick: () => navigate('/challenges/frontend')
-        },
-        {
-            text: 'Data Structure & Algorithm',
-            className: pathname == '/challenges/algorithm' ? 'active': '',
-            onClick: () => navigate('/challenges/algorithm')
-        },
-        {
-            text: 'My Profile',
-            className: !currentUser?.profile!.username ? 'hidden' : pathname.includes('/profile/') ? 'active' : '',
-            onClick: () => navigate(`/profile/${currentUser?.profile!.username}`)
-        },
-        {
-            text: 'About Us',
-            className: '',
-            onClick: () => window.open('https://www.linkedin.com/company/codemax-australia/', '_blank')
-        }
-    ]
+            {
+                text: 'Home',
+                className: pathname == '/' ? 'active' : '',
+                onClick: () => navigate('/')
+            },
+            {
+                text: 'Front-End Challenges',
+                className: pathname == '/challenges/frontend' ? 'active' : '',
+                onClick: () => navigate('/challenges/frontend')
+            },
+            {
+                text: 'Algorithm Challenges',
+                className: pathname == '/challenges/algorithm' ? 'active' : '',
+                onClick: () => navigate('/challenges/algorithm')
+            },
+            {
+                text: 'About',
+                className: '',
+                onClick: () => window.open('https://www.linkedin.com/company/codemax-australia/', '_blank')
+            }
+        ]
+
+    const handleSignout = async () => {
+        const { error } = await signout();
+        showToast("success", "Hope we can see you again!");
+        navigate('/signin');
+        return;
+    }
+
     return (
         <header className={twMerge(`py-4 px-10 relative bg-[#2C2446]`,
             className
         )}>
             <div className=" flex items-center justify-between">
-                <Link to={'/'} className="block w-16">
+                <Link to={'/'} className="hidden md:block w-16">
                     <img src="/images/logo.png" alt="Logo" />
                 </Link>
 
@@ -144,19 +153,20 @@ export const Header: React.FC<Props> = ({ className }) => {
                         before:[&_li]:-z-10
                         before:[&_li]:rounded-full
                         hover:before:[&_li]:inset-0
+                        text-center
 
                         *:cursor-pointer
                     ">
                             {MENU.map((option, index) => (
-                                <li className={option.className} 
-                                onClick={option.onClick}
-                                key={index}>{option.text}</li>
+                                <li className={option.className}
+                                    onClick={option.onClick}
+                                    key={index}>{option.text}</li>
                             ))}
                         </ul>
                     </div>
                 </nav>
                 <div className="ml-auto">
-                    {currentUser?.id ? (<UserSignedIn currentUser={currentUser} />) : (<Guess />)}
+                    {currentUser?.id ? (<UserSignedIn handleSignout={handleSignout} currentUser={currentUser} />) : (<Guess />)}
                 </div>
             </div>
         </header>

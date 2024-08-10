@@ -6,11 +6,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useApp } from "../context/AppContext";
 import { Editor } from "@monaco-editor/react";
 import Tab from "../components/Tab";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useSupabase } from "../context/SupabaseContext";
 import { useToast } from "../context/ToastContext";
 import { MonacoEditor } from "../model";
-import { DEFAULT_CHALLENGE_CSS, DEFAULT_CHALLENGE_DESCRIPTION, DEFAULT_CHALLENGE_HTML, DEFAULT_CHALLENGE_JAVASCRIPT, DEFAULT_CHALLENGE_JS, DEFAULT_CHALLENGE_PYTHON } from "../data";
+import { DEFAULT_CHALLENGE_CSS, DEFAULT_CHALLENGE_DESCRIPTION, DEFAULT_CHALLENGE_DESCRIPTION_ALGORITHM, DEFAULT_CHALLENGE_HTML, DEFAULT_CHALLENGE_JAVASCRIPT, DEFAULT_CHALLENGE_JS, DEFAULT_CHALLENGE_PYTHON, DEFAULT_TESTCASE } from "../data";
 
 interface Props {
     className?: string;
@@ -31,9 +31,19 @@ export const Admin: React.FC<Props> = ({ className }) => {
         mode: 'onBlur',
         resolver: zodResolver(schema)
     });
-    const { handleSubmit, formState } = methods;
+    const { handleSubmit, formState, watch, setValue } = methods;
     const { createChallenge } = useSupabase();
     const { showToast } = useToast();
+    const language = watch('language');
+
+    useEffect(() => {
+        if (language == 'algorithm') {
+            setValue('description', DEFAULT_CHALLENGE_DESCRIPTION_ALGORITHM);
+        }
+        else {
+            setValue('description', DEFAULT_CHALLENGE_DESCRIPTION);
+        }
+    }, [language]); // Re-run this effect whenever `lang` changes
 
     const onSubmit = async (formData: FieldValues) => {
         const rating = formData.rating;
@@ -103,6 +113,7 @@ export const Admin: React.FC<Props> = ({ className }) => {
                         <FormField
                             name="name" id="name" label="Challenge Name: " type="text"></FormField>
                         <FormField
+                            defaultValue="frontend"
                             data={[
                                 {
                                     text: 'Front End',
@@ -135,10 +146,10 @@ export const Admin: React.FC<Props> = ({ className }) => {
                         <FormField
                             name="tags" id="tags" label="Tags: " type="text"></FormField>
                         <FormField
-                            name="testcase" id="testcase" label="Test Case: " type="text"></FormField>
+                            name="testcase" id="testcase" label="Test Case: " type="text" defaultValue={DEFAULT_TESTCASE}></FormField>
                         <FormField
                             name="description" id="description" label="Challenge Description: " row={5} inputType="textarea" type="text"
-                            defaultValue={DEFAULT_CHALLENGE_DESCRIPTION}></FormField>
+                        ></FormField>
 
                         <Tab className="max-h-[400px]" tabsList={[
                             {
@@ -214,6 +225,8 @@ export const Admin: React.FC<Props> = ({ className }) => {
                                     onMount={(editor) => handleEditorDidMount(editor, 'PYTHON')} theme='vs-dark' defaultLanguage="python" defaultValue={DEFAULT_CHALLENGE_PYTHON} />)
                             }
                         ]}></Tab>
+
+
                         <div className="flex flex-col gap-3">
                             <button type="submit" className="btn-primary">Add New Challenge</button>
                         </div>

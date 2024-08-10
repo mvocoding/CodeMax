@@ -11,7 +11,6 @@ import { NewSubmission } from './pages/NewSubmission'
 import { SubmissionHeader } from './components/SubmissionHeader'
 import { Submission } from './pages/Submission'
 import { NotFound } from './pages/NotFound'
-import { PreviewFullScreen } from './pages/PreviewFullScreen'
 import { ProtectedRoute } from './components/ProtectedRoute'
 
 function App() {
@@ -34,7 +33,6 @@ function App() {
         <Route path="/signup" element={<ProtectedRoute isPublic element={<Signup />} />} />
         <Route path="/profile/:id" element={<Profile />} />
         <Route path="/admin" element={<ProtectedRoute element={<Admin />} />} />
-        <Route path="/preview/:submissionid" element={<PreviewFullScreen />} />
         <Route path="/notfound" element={<NotFound />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

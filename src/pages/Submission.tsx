@@ -1,5 +1,5 @@
 import { useSupabase } from "../context/SupabaseContext";
-import { useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useApp } from "../context/AppContext";
 import { LazyLoading } from "../components/LazyLoading";
@@ -35,7 +35,11 @@ export const Submission: React.FC<Props> = ({ className }) => {
 
     return (
         <LazyLoading isLoading={!submission} text="Loading Submission...">
-            <AlgorithmSubmission data={submission}></AlgorithmSubmission>
+            {submission?.challenge_lang[0] == 'frontend' ? (
+                <FrontEndSubmission data={submission}></FrontEndSubmission>
+            ) : (
+                <AlgorithmSubmission data={submission}></AlgorithmSubmission>
+            )}
         </LazyLoading>
     )
 }

@@ -5,7 +5,6 @@ import { FormField } from "../components/FormField";
 import { Link, useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext";
 import { SigninForm, signInSchema } from "../model";
-import { useEffect } from "react";
 import { Testimonial } from "../layout/Testimonial";
 import { useToast } from "../context/ToastContext";
 import { useSupabase } from "../context/SupabaseContext";

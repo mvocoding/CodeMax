@@ -3,9 +3,8 @@ import axios from 'axios';
 export const LANGUAGE_VERSIONS = {
     javascript: "18.15.0",
     python: "3.10.0",
-    java: "15.0.2",
-    csharp: "6.12.0",
 };
+
 
 export const CODEPREVIEW_API = axios.create({
     baseURL: "https://emkc.org/api/v2/piston",
@@ -36,12 +35,12 @@ testcase_list = json.loads('${testcases}')
 res = []
 for testcase in testcase_list:
     func_result = question(*testcase['params'])
-    test_result = 'PASS' if func_result == testcase['result'] else 'FAIL'
+    test_result = 'PASS' if json.dumps(func_result) == json.dumps(testcase['result']) else 'FAIL'
     res.append({
-        params: testcase['params'],
-        result: testcase['result'],
-        funcResult: func_result,
-        testResult: test_result
+        'params': testcase['params'],
+        'result': testcase['result'],
+        'funcResult': func_result,
+        'testResult': test_result
     })
 
 json_string = json.dumps(res, indent=4)
@@ -55,7 +54,7 @@ const testcase_list = JSON.parse('${testcases}');
 const res = [];
 for(testcase of testcase_list){
     func_result = question(...testcase['params']);
-    test_result = func_result == testcase['result'] ? 'PASS' : 'FAIL';
+    test_result = JSON.stringify(func_result) == JSON.stringify(testcase['result']) ? 'PASS' : 'FAIL';
     res.push({
         params: testcase['params'],
         result: testcase['result'],

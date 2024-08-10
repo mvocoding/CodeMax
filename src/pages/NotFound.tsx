@@ -11,7 +11,7 @@ export const NotFound: React.FC<Props> = ({ className }) => {
         )}>
             <article className="text-lg mx-auto flex max-md:flex-col *:flex-1 rounded-xl justify-center max-w-[80%] bg-[#2C2446]">
                 <div className="">
-                    <img src="https://static-00.iconduck.com/assets.00/404-page-not-found-illustration-2048x998-yjzeuy4v.png" alt="Likes Dislikes Stats" className="w-full h-full rounded-bl-xl rounded-tl-xl  object-cover object-top" />
+                    <img src="https://static-00.iconduck.com/assets.00/404-page-not-found-illustration-2048x998-yjzeuy4v.png" alt="Likes Dislikes Stats" className="w-full h-full rounded-bl-xl rounded-tl-xl  object-contain object-center" />
                 </div>
                 <div className="p-10 space-y-8">
                     <h2 className="text-3xl">OOps, Page Not Found</h2>

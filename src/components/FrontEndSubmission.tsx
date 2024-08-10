@@ -20,34 +20,12 @@ export const FrontEndSubmission: React.FC<Props> = ({ className, data }) => {
     let htmlEditor = useRef<MonacoEditor | null>(null);
     let cssEditor = useRef<MonacoEditor | null>(null);
     let jsEditor = useRef<MonacoEditor | null>(null);
-    const [combineHTML, setCombineHTML] = useState<string | null>(null);
 
     useEffect(() => {
         setFormData(data);
-        setCombineHTML(createHTML(data.submission_code.html, data.submission_code.css, data.submission_code.js));
     }, [data]);
 
-    const createHTML = (html: string, css: string, js: string) => {
-        const combinedHtml = `
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <style>${css}</style>
-            </head>
-            <body>
-                ${html}
-                <script>${js}</script>
-            </body>
-            </html>
-        `;
-        return combinedHtml;
-    }
-
     const updateHtmlContent = () => {
-        const html = htmlEditor.current!.getValue();
-        const css = cssEditor.current!.getValue();
-        const js = jsEditor.current!.getValue();
-
         setFormData({
             ...formData,
             submission_code: {
@@ -56,9 +34,6 @@ export const FrontEndSubmission: React.FC<Props> = ({ className, data }) => {
                 js: jsEditor.current?.getValue()
             }
         });
-
-        const combinedHtml = createHTML(html, css, js);
-        setCombineHTML(combinedHtml);
     };
 
     const handleEditorDidMount = (editor: MonacoEditor, type: string) => {
@@ -99,7 +74,7 @@ export const FrontEndSubmission: React.FC<Props> = ({ className, data }) => {
                 {
                     title: 'Preview',
                     content: (
-                        <HtmlIframe className="min-h-screen min-w-full" height="100%" width="100%" src={combineHTML!} />
+                        <HtmlIframe className="min-h-screen min-w-full" height="100%" width="100%" src={formData?.submission_code!.preview!} />
                     )
                 },
             ]}></Tab>

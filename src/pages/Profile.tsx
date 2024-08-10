@@ -13,7 +13,6 @@ import { SubmissionPost } from "../components/SubmissionPost";
 import { FaGithub } from "react-icons/fa";
 import { CiLinkedin } from "react-icons/ci";
 import { TbWorldWww } from "react-icons/tb";
-import { IoIosLogOut } from "react-icons/io";
 
 interface Props {
     className?: string;
@@ -148,13 +147,6 @@ export const Profile: React.FC<Props> = ({ className }) => {
         }
     }
 
-    const handleSignout = async () => {
-        const { error } = await signout();
-        showToast("success", "Hope we can see you again!");
-        navigate('/signin');
-        return;
-    }
-
     if (!profile || !submissions) return;
 
     return (
@@ -178,23 +170,23 @@ export const Profile: React.FC<Props> = ({ className }) => {
                 [&_.btn-icon]:text-gray-200
                 hover:[&_.btn-icon]:text-gray-400
                 `}>
-                    <div className="absolute text-white rounded-tl-xl rounded-tr-xl bottom-full left-12 bg-[#2C2446]
-                    flex gap-x-4 px-2 py-1">
-                        <button className="btn-icon" type="button">
-                            <TbWorldWww />
-                        </button>
-                        <button className="btn-icon" type="button">
-                            <FaGithub />
-                        </button>
-                        <button className="btn-icon" type="button">
-                            <CiLinkedin />
-                        </button>
-                    </div>
-
-                    <div className="p-5 w-full md:w-[30%] flex flex-col justify-center items-center gap-5 ">
+                    <div className="relative p-5 w-full md:w-[30%] flex flex-col justify-center items-center gap-5 ">
                         <img src={profile!.avatar!} alt="Likes Dislikes Stats" className="w-[11rem] aspect-square rounded-full  object-cover object-top" />
                         <div className="flex gap-2">
                             {btns}
+                        </div>
+
+                        <div className="absolute text-white rounded-tl-xl rounded-tr-xl bottom-full left-1/2 -translate-x-1/2 bg-[#2C2446]
+                    flex gap-x-4 px-2 py-1">
+                            <button className="btn-icon" type="button">
+                                <TbWorldWww />
+                            </button>
+                            <button className="btn-icon" type="button">
+                                <FaGithub />
+                            </button>
+                            <button className="btn-icon" type="button">
+                                <CiLinkedin />
+                            </button>
                         </div>
 
                     </div>
@@ -203,9 +195,7 @@ export const Profile: React.FC<Props> = ({ className }) => {
                             <FormField
                                 className="editable  text-white font-semibold"
                                 name="fullname" id="fullname" label="" type="text" ></FormField>
-                            <button className="btn-icon" onClick={handleSignout} type="button">
-                                <IoIosLogOut />
-                            </button>
+
                         </div>
                         <FormField
                             className="editable"

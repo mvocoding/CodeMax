@@ -4,6 +4,15 @@ export const DEFAULT_CHALLENGE_DESCRIPTION = `Start with this design and transfo
 If you want to go the extra mile, expand upon it, and integrate your unique touch by adding animations and interactivity.
 
 Prioritize creativity over pixel-perfect accuracy and showcase your developer ingenuity.`;
+
+
+export const DEFAULT_CHALLENGE_DESCRIPTION_ALGORITHM = `Start with this problem statement and transform it into a functional algorithm using your choice of programming language. Implement the solution by designing an efficient data structure and optimizing the algorithm for performance.
+
+If you want to go the extra mile, expand upon it by considering edge cases, improving the time and space complexity, and adding test cases to validate your solution.
+
+Prioritize creativity and problem-solving skills over simply arriving at a correct answer. Showcase your developer ingenuity.`;
+
+
 export const DEFAULT_CHALLENGE_CSS = ``;
 export const DEFAULT_CHALLENGE_JS = ``;
 export const DEFAULT_CHALLENGE_HTML = `<html>
@@ -109,3 +118,4 @@ public class Main {
 }`;
 
 
+export const DEFAULT_TESTCASE = `[{ "params": [[1]], "result": 1 }]`

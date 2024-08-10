@@ -49,8 +49,8 @@ export const ChallengeDetail: React.FC<Props> = ({ className }) => {
             className
         )}>
             <article className="text-lg mx-auto flex max-md:flex-col *:flex-1 rounded-xl justify-center max-w-[80%] bg-[#2C2446]">
-                <div className="">
-                    <img src={challenge.thumbnail} alt="Challenge Thumbnail" className="w-full h-full rounded-bl-xl rounded-tl-xl  object-cover object-top" />
+                <div className="pl-5">
+                    <img src={challenge.thumbnail} alt="Challenge Thumbnail" className="w-full h-full rounded-bl-xl rounded-tl-xl  object-contain object-center" />
                 </div>
                 <div className="p-10 space-y-8">
                     <h2 className="text-xl">Challenge: <span className="font-semibold capitalize">{challenge?.name}</span></h2>

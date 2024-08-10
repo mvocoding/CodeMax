@@ -50,18 +50,15 @@ export const signUpSchema = z.object({
 })
 
 export const signInSchema = z.object({
-    email: z.string().min(1),
-    password: z.string().min(1)
+    email: z.string().min(1, 'Email is required!'),
+    password: z.string().min(1, 'Password is required!')
 });
 export type SignupForm = z.infer<typeof signUpSchema>;
 export type SigninForm = z.infer<typeof signInSchema>;
 
-
-
 export interface MonacoEditor{
     getValue: () => string;
 }
-
 
 export interface FilterChallengeParams{
     filter_name: string;

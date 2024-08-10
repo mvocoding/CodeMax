@@ -1,26 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
 import HtmlIframe from "./HtmlIframe";
+import { DEFAULT_CHALLENGE_HTML } from "../data";
 
 interface Props {
     className?: string;
     submissionsList: any[];
-}
-
-const createHTML = (html: string, css: string, js: string) => {
-    const combinedHtml = `
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <style>${css}</style>
-        </head>
-        <body>
-            ${html}
-            <script>${js}</script>
-        </body>
-        </html>
-    `;
-    return combinedHtml;
 }
 
 export const SubmissionPost: React.FC<Props> = ({ className, submissionsList }) => {
@@ -45,10 +30,7 @@ export const SubmissionPost: React.FC<Props> = ({ className, submissionsList }) 
                         className="">
                         <div className="p-3">
                             <HtmlIframe className="h-[20rem] min-w-full"
-                            src={createHTML(submission.submission_code.html, 
-                                submission.submission_code.css,
-                                submission.submission_code.js
-                            )} scrollbar="no"></HtmlIframe>
+                            src={submission.submission_code.preview || DEFAULT_CHALLENGE_HTML} scrollbar="no"></HtmlIframe>
                         </div>
                         <div className="p-3 space-y-1">
                             <p className="uppercase font-semibold">{submission.challenge_name}</p>

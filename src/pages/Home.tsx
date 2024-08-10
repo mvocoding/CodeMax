@@ -13,7 +13,14 @@ export const Home: React.FC<Props> = ({ className }) => {
     const [challenges, setChallenges] = useState<any[] | null>(null);
     useEffect(() => {
         const getAllChallenges = async () => {
-            const { error, data } = await getChallenges('', [], -1, 1, 12);
+            const { error, data } = await getChallenges({
+                filter_name: '',
+                filter_tag: [],
+                filter_rating: -1,
+                filter_lang: ['frontend'],
+                page_number: 1,
+                page_size: 12
+            });
             if (!error) {
                 setChallenges(data);
             }

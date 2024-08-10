@@ -1,50 +1,67 @@
 import { Editor } from "@monaco-editor/react";
 import { twMerge } from "tailwind-merge";
 import Tab from "../components/Tab";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useSubmissionStore } from "../store/useSubmissionStore";
 import HtmlIframe from "./HtmlIframe";
+import { MonacoEditor } from "../model";
+import { FormProvider, useForm } from "react-hook-form";
+import z from 'zod';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FormField } from "./FormField";
+
+const schema = z.object({
+    language: z.string()
+});
+type FieldValues = z.infer<typeof schema>;
+
+const LANGUAGE_LIST = [
+    {
+        text: 'JAVASCRIPT',
+        value: 'javascript'
+    },
+    {
+        text: 'PYTHON',
+        value: 'python'
+    }
+]
 
 interface Props {
     className?: string;
     data: any;
 }
-export const AlgorithmSubmission: React.FC<Props> = ({ className, data }) => {
-    if (!data) return;
 
-    const { formData, setFormData, setUserCode} = useSubmissionStore(state => ({
+export const AlgorithmSubmission: React.FC<Props> = ({ className, data }) => {
+    const { formData, setFormData, setUserCode } = useSubmissionStore(state => ({
         formData: state.formData,
         setFormData: state.setFormData,
         setUserCode: state.setUserCode,
     }));
-    const ide = useRef(null);
 
-    useEffect(() => {
-        setFormData(data);
-    }, [data]);
+    const methods = useForm<FieldValues>({
+        mode: 'onBlur',
+        resolver: zodResolver(schema),
+        defaultValues: {
+            language: 'javascript'
+        }
+    });
+
+    const { watch } = methods;
+    const language = watch('language');
+    const ide = useRef<MonacoEditor | null>(null);
 
     const updateCode = () => {
         const code = ide.current!.getValue();
-        setUserCode(code);
+        setUserCode(code, language);
     };
 
-    const editor = useMemo(() => (
-        <Editor
-            onChange={updateCode}
-            onMount={(editor) => { ide.current = editor }}
-            defaultValue={data.submission_code[data.submission_code.currentLanguage]} className=""
-            theme='vs-dark' defaultLanguage={data.submission_code.currentLanguage}
-            options={{
-                minimap: { enabled: false },
-                overviewRulerLanes: 0,
-                scrollbar: {
-                    horizontal: "hidden",
-                    handleMouseWheel: false,
-                },
-                wordWrap: 'on',
-            }}
-        />
-    ), []);
+    useEffect(() => {
+        if (!data) 
+            return;
+        setFormData(data);
+    }, [data]);
+
+    if (!formData) return;
 
     return (
         <div className={twMerge(`h-screen flex fade-in-up *:flex-1 `)}>
@@ -53,7 +70,7 @@ export const AlgorithmSubmission: React.FC<Props> = ({ className, data }) => {
                     title: 'Problem',
                     content: (
                         <div className="w-[80%] h-[80%] flex mx-auto">
-                            <img className="w-full h-full object-contain object-center " src={data.challenge_thumbnail} alt="Coding Challenge" />
+                            <img className="w-full h-full object-contain object-center " src={formData.challenge_thumbnail} alt="Coding Challenge" />
                         </div>
                     )
                 },
@@ -65,27 +82,33 @@ export const AlgorithmSubmission: React.FC<Props> = ({ className, data }) => {
                         [&_option]:text-gray-900 
                         ">
                             <div className="grid  min-h-screen">
-                                <div className="text-lg p-3 flex justify-center gap-x-10">
-                                    <div className="space-x-3 flex items-center">
-                                        <label htmlFor="">Language:</label>
-                                        <select name="" id="">
-                                            <option value="javascript">Javascript</option>
-                                            <option value="python">Python</option>
-                                        </select>
-                                    </div>
-                                    <div className="space-x-3 flex items-center">
-                                        <label htmlFor="">Font Size:</label>
-                                        <select name="" id="">
-                                            <option value="python">15</option>
-                                            <option value="python">16</option>
-                                            <option value="python">17</option>
-                                            <option value="python">18</option>
-                                            <option value="python">19</option>
-                                            <option value="python">20</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                {editor}
+                                <FormProvider {...methods}>
+                                    <form
+                                        className="text-lg p-3 flex justify-center gap-x-10 [&_.input]:!bg-white [&_.field-input]:flex [&_.field-input]:items-center [&_.field-input]:gap-3">
+                                        <FormField id="language" name="language" inputType="select"
+                                            defaultValue={formData?.submission_code?.currentLanguage}
+                                            label="LANGUAGE: "
+                                            data={LANGUAGE_LIST}></FormField>
+                                    </form>
+                                </FormProvider>
+
+                                <Editor
+                                    onChange={updateCode}
+                                    onMount={(editor) => { ide.current = editor }}
+                                    value={formData?.submission_code[language]} className="!text-3xl"
+                                    theme='vs-dark'
+                                    language={language}
+                                    options={{
+                                        minimap: { enabled: false },
+                                        overviewRulerLanes: 0,
+                                        scrollbar: {
+                                            horizontal: "hidden",
+                                            handleMouseWheel: false,
+                                        },
+                                        wordWrap: 'on',
+                                        fontSize: 20,
+                                    }}
+                                />
                             </div>
                         </div>
                     )
@@ -93,7 +116,7 @@ export const AlgorithmSubmission: React.FC<Props> = ({ className, data }) => {
                 {
                     title: 'Preview',
                     content: (
-                        <HtmlIframe className="min-h-screen min-w-full" height="100%" width="100%" src={formData?.submission_code.preview!} />
+                        <HtmlIframe className="min-h-screen min-w-full" height="100%" width="100%" src={formData?.submission_code!.preview!} />
                     )
                 }
             ]}></Tab>
