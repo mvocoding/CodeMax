@@ -4,7 +4,7 @@ import { useApp } from "../context/AppContext";
 import { useSubmissionStore } from "../store/useSubmissionStore";
 import { useSupabase } from "../context/SupabaseContext";
 import { useToast } from "../context/ToastContext";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getTestResult } from "../util/emkc";
 import { createHTML } from "../util/util";
 
@@ -25,24 +25,18 @@ export const SubmissionHeader: React.FC<Props> = ({ className }) => {
     const navigate = useNavigate();
     const [menu, setMenu] = useState<MenuOption | null>(null);
 
-    const handleSaveClick = async () => {
+    const handleSaveClick = async (isSaving: boolean) => {
+        let draft = true;
+        if(isSaving)
+            draft = formData?.submission_draft!;
+
         showToast("inprogress", 'Updating your submission...')
-        const { error, data } = await updateSubmission(formData?.submission_id!, formData?.submission_code!, formData?.submission_draft!);
+        const { error, data } = await updateSubmission(formData?.submission_id!, formData?.submission_code!, draft);
         if (error) {
             showToast("error", 'Something went wrong!')
         }
         else {
             showToast("success", 'Update submission successfully !')
-        }
-    }
-    const handleSubmitClick = async () => {
-        showToast("inprogress", 'Submitting your submission...')
-        const { error, data } = await updateSubmission(formData?.submission_id!, formData?.submission_code!, false);
-        if (error) {
-            showToast("error", 'Something went wrong!')
-        }
-        else {
-            showToast("success", 'Submit submission successfully !')
         }
     }
     const handleTryChallengeClick = async () => {
@@ -56,6 +50,7 @@ export const SubmissionHeader: React.FC<Props> = ({ className }) => {
         }
     }
     const handleRunClick = async () => {
+        showToast("inprogress", 'Running your code...')
         if(formData!.challenge_lang[0] == 'frontend'){
             const previewHTML = createHTML(formData!.submission_code?.html!, formData!.submission_code?.css!, 
                 formData!.submission_code?.js!
@@ -66,7 +61,7 @@ export const SubmissionHeader: React.FC<Props> = ({ className }) => {
         }
 
         const { testcase, currentLanguage } = formData!.submission_code!;
-        let code = formData?.submission_code[currentLanguage];
+        let code = formData?.submission_code![currentLanguage];
 
         const testResp = await getTestResult(code, testcase!, currentLanguage!);
         let testcaseHTML = undefined;
@@ -98,6 +93,7 @@ export const SubmissionHeader: React.FC<Props> = ({ className }) => {
             ${testcaseHTML}
         </div>`;
 
+        await updateSubmission(formData?.submission_id!, formData?.submission_code!, formData?.submission_draft!);
         setPreviewHTML(previewHTML);
     }
 
@@ -136,7 +132,7 @@ export const SubmissionHeader: React.FC<Props> = ({ className }) => {
                         </span> Save
                     </>
                 ),
-                onClick: () => handleSaveClick(),
+                onClick: () => handleSaveClick(true),
             },
             {
                 children: (
@@ -146,7 +142,7 @@ export const SubmissionHeader: React.FC<Props> = ({ className }) => {
                         </span> Submit
                     </>
                 ),
-                onClick: () => handleSubmitClick(),
+                onClick: () => handleSaveClick(false),
                 className: 'active'
             }
         ],
@@ -175,10 +171,14 @@ export const SubmissionHeader: React.FC<Props> = ({ className }) => {
         ]
     }
 
+    const hasRun = useRef<boolean>(false);
     useEffect(() => {
-        if (formData && currentUser) {
+        if (formData && currentUser && !hasRun.current) {
             const currentMenu: MenuOption = currentUser?.profile.username == formData.username ? 'OWNER' : 'GUESS';
             setMenu(currentMenu);
+
+            handleRunClick();
+            hasRun.current = true;
         }
     }, [currentUser, formData]);
 

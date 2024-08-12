@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
 import HtmlIframe from "./HtmlIframe";
-import { DEFAULT_CHALLENGE_HTML } from "../data";
+import { NOPREVIEW_HTML } from "../data";
 
 interface Props {
     className?: string;
@@ -30,7 +30,7 @@ export const SubmissionPost: React.FC<Props> = ({ className, submissionsList }) 
                         className="">
                         <div className="p-3">
                             <HtmlIframe className="h-[20rem] min-w-full"
-                            src={submission.submission_code.preview || DEFAULT_CHALLENGE_HTML} scrollbar="no"></HtmlIframe>
+                            src={submission.submission_code.preview || NOPREVIEW_HTML} scrollbar="no"></HtmlIframe>
                         </div>
                         <div className="p-3 space-y-1">
                             <p className="uppercase font-semibold">{submission.challenge_name}</p>

@@ -56,9 +56,9 @@ export const AlgorithmSubmission: React.FC<Props> = ({ className, data }) => {
     };
 
     useEffect(() => {
-        if (!data) 
-            return;
-        setFormData(data);
+        if (data){
+            setFormData(data);
+        }
     }, [data]);
 
     if (!formData) return;

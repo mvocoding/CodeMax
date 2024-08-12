@@ -119,3 +119,25 @@ public class Main {
 
 
 export const DEFAULT_TESTCASE = `[{ "params": [[1]], "result": 1 }]`
+
+export const NOPREVIEW_HTML = `
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>No Preview Available</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="flex items-center justify-center min-h-screen bg-gray-100">
+    <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+        <h2 class="text-2xl font-semibold text-gray-700">No Preview Available</h2>
+        <p class="text-gray-500 mt-2">Please submit your code to see the preview!</p>
+    </div>
+</body>
+
+</html>
+
+`

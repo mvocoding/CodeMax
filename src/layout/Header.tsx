@@ -35,12 +35,12 @@ const UserSignedIn: React.FC<{ currentUser: User, handleSignout: () => void }> =
     return (
         <div className="flex justify-start items-center gap-3 ">
             <div className="capitalize text-center">
-                <p className="px-4 py-1 bg-yellow-400 text-purple-900 font-bold rounded-lg">{currentUser.profile!.role}</p>
+                <p className="cursor-default px-4 py-1 bg-yellow-400 text-purple-900 font-bold rounded-lg">{currentUser.profile!.role}</p>
             </div>
-            <Link className="size-12" to={`/profile/${currentUser.profile!.username}`}>
-                <img className="w-full object-cover object-top border border-sky-800 rounded-full" src={currentUser.profile?.avatar} alt="User Avatar" />
+            <Link className="size-12 group" to={`/profile/${currentUser.profile!.username}`}>
+                <img className="group-hover:border-2 w-full object-cover object-top border border-sky-800 rounded-full" src={currentUser.profile?.avatar} alt="User Avatar" />
             </Link>
-            <button className="btn-icon text-xl" onClick={handleSignout} type="button">
+            <button className="btn-icon text-xl hover:scale-110" onClick={handleSignout} type="button">
                 <IoIosLogOut />
             </button>
         </div>

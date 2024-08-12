@@ -48,25 +48,26 @@ const RATING_SELECT = [
 
 const FilterPanel: React.FC<FilterProps> = ({ className, onChangeRating, currentFilter }) => {
     return (
-        <section className={twMerge(`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 *:cursor-pointer
-            *:border *:rounded-lg *:border-sky-500`,
+        <section className={twMerge(``,
             className
         )}>
-            {RATING_SELECT.map((option, index) => (
-                <div key={index}
-                    onClick={() => onChangeRating(option.rating)}
-                    className={twJoin(`flex items-center p-2 md:p-6`,
-                        currentFilter.rating == option.rating && 'bg-purple-600/50'
-                    )}>
-                    <div>
-                        <h4 className="text-xl font-semibold flex gap-2 items-center">
-                            <StarRating rating={option.rating}></StarRating>
-                            <p>{option.text}</p>
-                        </h4>
-                        <p className="max-sm:hidden">{option.description}</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
+                {RATING_SELECT.map((option, index) => (
+                    <div key={index}
+                        onClick={() => onChangeRating(option.rating)}
+                        className={twJoin(`border rounded-lg border-sky-500 cursor-pointer flex items-center p-2 md:p-6`,
+                            currentFilter.rating == option.rating && 'bg-purple-600/50'
+                        )}>
+                        <div>
+                            <h4 className="text-xl font-semibold flex gap-2 items-center">
+                                <StarRating rating={option.rating}></StarRating>
+                                <p>{option.text}</p>
+                            </h4>
+                            <p className="max-sm:hidden">{option.description}</p>
+                        </div>
                     </div>
-                </div>
-            ))}
+                ))}
+            </div>
         </section>
     )
 }
