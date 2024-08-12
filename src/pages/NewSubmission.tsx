@@ -1,5 +1,5 @@
 import { useSupabase } from "../context/SupabaseContext";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useApp } from "../context/AppContext";
 
