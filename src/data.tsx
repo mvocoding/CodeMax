@@ -118,7 +118,7 @@ public class Main {
 }`;
 
 
-export const DEFAULT_TESTCASE = `[{ "params": [[1]], "result": 1 }]`
+export const DEFAULT_TESTCASE = `[{ "params": [1], "result": 1 }]`
 
 export const NOPREVIEW_HTML = `
 <!DOCTYPE html>

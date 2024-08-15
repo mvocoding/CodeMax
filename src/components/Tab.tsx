@@ -24,7 +24,7 @@ interface TabContentProps {
 const TabContent: React.FC<TabContentProps> = ({ className, content, isActive }) => {
     return (
         <div 
-            className={twMerge(' relative w-full transition-all duration-200 leading-6 text-sm h-full',
+            className={twMerge(' relative transition-all duration-200 leading-6 text-sm ',
                 isActive ? ' left-0 visible' : ' left-[10000px] invisible ',
                 className
             )}>{content}</div>

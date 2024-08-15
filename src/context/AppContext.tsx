@@ -51,6 +51,7 @@ export const AppProvider: React.FC<Props> = ({ children }) => {
                     setCurrentSession(null);
                     showToast("error", 'Your session has expired. Please log in again!');
                     navigate('/signin', { replace: true });
+                    return;
                 }
             }
             else {

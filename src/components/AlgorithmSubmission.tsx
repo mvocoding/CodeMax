@@ -70,7 +70,7 @@ export const AlgorithmSubmission: React.FC<Props> = ({ className, data }) => {
                     title: 'Problem',
                     content: (
                         <div className="w-[80%] h-[80%] flex mx-auto">
-                            <img className="w-full h-full object-contain object-center " src={formData.challenge_thumbnail} alt="Coding Challenge" />
+                            <img className="w-full object-contain max-h-screen object-center " src={formData.challenge_thumbnail} alt="Coding Challenge" />
                         </div>
                     )
                 },

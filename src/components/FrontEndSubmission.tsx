@@ -47,7 +47,7 @@ export const FrontEndSubmission: React.FC<Props> = ({ className, data }) => {
             <Tab tabsList={[
                 {
                     title: 'Challenge',
-                    content: (<img src={formData?.challenge_thumbnail} alt="Challenge Thumbnail" />)
+                    content: (<img className="w-full object-contain max-h-screen object-center " src={formData?.challenge_thumbnail} alt="Challenge Thumbnail" />)
                 },
 
                 {
